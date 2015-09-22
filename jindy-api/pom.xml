@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <!-- remove after parent pom is released to maven central -->
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+  
+  <parent>
+    <groupId>org.irenical.maven</groupId>
+    <artifactId>parent-root</artifactId>
+    <version>1.0</version>
+  </parent>
+
+  <groupId>org.irenical.jindy</groupId>
+  <artifactId>jindy-api</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <name>Jindy API</name>
+  <description>Jindy - Configuration API</description>
+
+  <packaging>jar</packaging>
+
+  <scm>
+    <connection>scm:git:git@github.com:irenical/jindy.git</connection>
+    <developerConnection>scm:git:git@github.com:irenical/jindy.git</developerConnection>
+    <url>git@github.com:irenical/jindy.git</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>Tiago Simão</name>
+      <email>tiagosimao@gmail.com</email>
+    </developer>
+  </developers>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+</project>
