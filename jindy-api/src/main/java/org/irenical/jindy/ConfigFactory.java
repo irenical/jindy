@@ -18,14 +18,18 @@ public class ConfigFactory {
 
     /**
      * Returns a Config instance, instanciating it on first call.
+     * If no factory implementation is provided, one will be searched using Service Loader
+     * If a Config with given name already exists, it will be simply returned
      * 
      * @param name
      *            - the Config instance name
+     * @param factory
+     *            - a custom factory implementation
      * @return the Config instance with given name, instanciating one if needed
      */
-    public static Config getConfig(String name) {
+    public static Config getConfig(String name, IConfigFactory factory) {
         if (name == null) {
-            throw new IllegalArgumentException("name argument cannot be null");
+            name = DEFAULT_CONFIG_NAME;
         }
         Config got = configs.get(name);
         if (got == null) {
@@ -36,7 +40,11 @@ public class ConfigFactory {
             synchronized (name.intern()) {
                 got = configs.get(name);
                 if (got == null) {
-                    got = load(name);
+                    got = factory == null ? load(name) : factory.createConfig(name);
+                    if(got==null){
+                        LOG.error("Factory " + factory + " returned a null Config");
+                        throw new InvalidConfigException("Invalid Config returned by " + factory + " factory: null");
+                    }
                     configs.put(name, got);
                 }
             }
@@ -46,18 +54,18 @@ public class ConfigFactory {
 
     private static Config load(String name) {
         LOG.info("Looking for a IConfigFactory implementation");
-        ServiceLoader<Config> loader = ServiceLoader.load(Config.class);
-        Iterator<Config> implIterator = loader.iterator();
-        Config got = null;
+        ServiceLoader<IConfigFactory> loader = ServiceLoader.load(IConfigFactory.class);
+        Iterator<IConfigFactory> implIterator = loader.iterator();
+        IConfigFactory got = null;
         if (implIterator.hasNext()) {
             got = implIterator.next();
         }
-        
+
         // error on multiple bindings
         if (implIterator.hasNext()) {
             StringBuilder sb = new StringBuilder("Multiple bindings found on classpath for " + IConfigFactory.class.getName() + "[");
             boolean first = true;
-            for (Config current : loader) {
+            for (IConfigFactory current : loader) {
                 if (!first) {
                     sb.append(",");
                 }
@@ -68,25 +76,41 @@ public class ConfigFactory {
             LOG.error(sb.toString());
             throw new ConfigMultipleBindingsException(sb.toString());
         }
-        
+
         // ok on single binding
         if (got != null) {
             LOG.info("Found a IConfigFactory implementation: " + got.getClass().getName());
-            return got;
+            return got.createConfig(name);
         }
-        
+
         // error on no binding
         LOG.error("No bindings found. Make sure you have an implementation class declared in META-INF/services/" + IConfigFactory.class.getName());
         throw new ConfigBindingNotFoundException("No bindings found. Make sure you have an implementation class declared in META-INF/services/" + IConfigFactory.class.getName());
     }
+    
+    /**
+     * Returns Config for given name, same as getConfig(name,null)
+     * @param name - the Config name
+     * @return the Config instance for given name
+     */
+    public static Config getConfig(String name) {
+        return getConfig(name,null);
+    }
 
     /**
-     * Returns the default Config, same as getConfig(DEFAULT_CONFIG_NAME)
+     * Returns the default Config, same as getConfig(null)
      * 
      * @return the default Config instance
      */
     public static Config getConfig() {
-        return getConfig(DEFAULT_CONFIG_NAME);
+        return getConfig(null);
+    }
+
+    /**
+     * Discards all Config instances
+     */
+    public static void clear() {
+        configs.clear();
     }
 
 }

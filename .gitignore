@@ -5,5 +5,5 @@
 .DS_Store
 .idea
 *.tmp
-/build
-/target
+build/*
+*/target/*
