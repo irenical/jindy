@@ -13,19 +13,25 @@ public class CommonsWrapper implements Config {
         this.config=config;
     }
     
+    private void assertKey(String key) throws ConfigNotFoundException {
+        if (!config.containsKey(key)) {
+            throw new ConfigNotFoundException("Mandatory configuration property '" + key + "' was not found");
+        }
+    }
+    
     @Override
-    public void unListen(String listenerId) {
+    public void unListen(ConfigChangedCallback callback) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String listen(String key, ConfigChangedCallback callback) {
+    public void listen(String key, ConfigChangedCallback callback) {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public String[] getStringArray(String key) {
-        throw new UnsupportedOperationException();
+        return config.getStringArray(key);
     }
 
     @Override
@@ -40,22 +46,26 @@ public class CommonsWrapper implements Config {
 
     @Override
     public String getMandatoryString(String key) throws ConfigNotFoundException {
-        throw new UnsupportedOperationException();
+        assertKey(key);
+        return config.getString(key);
     }
 
     @Override
     public int getMandatoryInt(String key) throws ConfigNotFoundException {
-        throw new UnsupportedOperationException();
+        assertKey(key);
+        return config.getInt(key);
     }
 
     @Override
     public float getMandatoryFloat(String key) throws ConfigNotFoundException {
-        throw new UnsupportedOperationException();
+        assertKey(key);
+        return config.getFloat(key);
     }
 
     @Override
     public boolean getMandatoryBoolean(String key) throws ConfigNotFoundException {
-        throw new UnsupportedOperationException();
+        assertKey(key);
+        return config.getBoolean(key);
     }
 
     @Override
@@ -65,12 +75,12 @@ public class CommonsWrapper implements Config {
 
     @Override
     public float getFloat(String key, float defaultValue) {
-        throw new UnsupportedOperationException();
+        return getFloat(key, defaultValue);
     }
 
     @Override
     public boolean getBoolean(String key, boolean defaultValue) {
-        throw new UnsupportedOperationException();
+        return config.getBoolean(key,defaultValue);
     }
 
 }

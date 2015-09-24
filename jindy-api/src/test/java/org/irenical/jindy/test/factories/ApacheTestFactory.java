@@ -22,12 +22,12 @@ public class ApacheTestFactory implements IConfigFactory {
             return new Config() {
     
                 @Override
-                public void unListen(String listenerId) {
+                public void unListen(ConfigChangedCallback callback) {
                     throw new UnsupportedOperationException();
                 }
     
                 @Override
-                public String listen(String key, ConfigChangedCallback callback) {
+                public void listen(String key, ConfigChangedCallback callback) {
                     throw new UnsupportedOperationException();
                 }
     

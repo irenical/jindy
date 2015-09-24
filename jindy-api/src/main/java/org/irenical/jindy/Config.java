@@ -7,15 +7,14 @@ public interface Config {
      * Registers a listener on given property. It will be call whenever the property's value is changed
      * @param key - the property name
      * @param callback - the callback function
-     * @return the listener ID. You will need this if you want to unlisten later on.
      */
-    public String listen(String key, ConfigChangedCallback callback);
+    public void listen(String key, ConfigChangedCallback callback);
 
     /**
-     * Unregisters listener with given ID
-     * @param listenerId - the listener ID retrieved by the listen method earlier
+     * Unregisters listener on all keys
+     * @param callback - the callback function earlier registered with listen()
      */
-    public void unListen(String listenerId);
+    public void unListen(ConfigChangedCallback callback);
 
     /**
      * Returns the boolean value for given property
