@@ -1,4 +1,5 @@
-# jindy
+[![Build Status](https://travis-ci.org/irenical/jindy.svg?branch=master)](https://travis-ci.org/irenical/jindy)
+
 Jindy is a configuration API for Java.
 
 Wether you use a database, a properties file or framework such as Apache Commons Configuration, Netflix's Archaius or one of your own. Chances are you have to know which while you code your stuff.
