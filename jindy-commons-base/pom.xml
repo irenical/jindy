@@ -10,7 +10,7 @@
 
   <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy-commons-base</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
 
   <name>Jindy Commons Configuration</name>
   <description>A base commons configuration jindy implementation</description>
@@ -38,7 +38,7 @@
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-api</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>commons-configuration</groupId>
