@@ -5,12 +5,12 @@
   <parent>
     <groupId>org.irenical.maven</groupId>
     <artifactId>parent-root</artifactId>
-    <version>1.8.0</version>
+    <version>1.8.2</version>
   </parent>
 
   <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy-api</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
 
   <name>Jindy API</name>
   <description>Jindy - Configuration API</description>
@@ -29,10 +29,6 @@
       <email>tiagosimao@gmail.com</email>
     </developer>
   </developers>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
 
   <dependencies>
     <dependency>

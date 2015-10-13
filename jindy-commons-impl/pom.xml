@@ -5,12 +5,12 @@
   <parent>
     <groupId>org.irenical.maven</groupId>
     <artifactId>parent-root</artifactId>
-    <version>1.8.0</version>
+    <version>1.8.2</version>
   </parent>
 
   <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy-commons-impl</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.1.0</version>
 
   <name>Jindy Commons Implementation</name>
   <description>A Jindy reference implementation, using Apache's commons configurationn</description>
@@ -30,15 +30,11 @@
     </developer>
   </developers>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-commons-base</artifactId>
-      <version>1.0.0</version>
+      <version>1.1.0</version>
     </dependency>
   </dependencies>
 

@@ -5,12 +5,12 @@
   <parent>
     <groupId>org.irenical.maven</groupId>
     <artifactId>parent-root</artifactId>
-    <version>1.8.0</version>
+    <version>1.8.2</version>
   </parent>
 
   <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy-archaius-base</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.1.0</version>
 
   <name>Jindy Archaius</name>
   <description>A base archaius jindy implementation</description>
@@ -30,15 +30,11 @@
     </developer>
   </developers>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-api</artifactId>
-      <version>1.1.0-SNAPSHOT</version>     <!-- TODO Change this to release version -->
+      <version>1.1.0</version>
     </dependency>
     <dependency>
       <groupId>com.netflix.archaius</groupId>
@@ -49,6 +45,12 @@
       <groupId>commons-configuration</groupId>
       <artifactId>commons-configuration</artifactId>
       <version>1.10</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.1.3</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
