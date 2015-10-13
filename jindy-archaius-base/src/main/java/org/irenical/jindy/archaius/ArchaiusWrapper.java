@@ -110,4 +110,9 @@ public class ArchaiusWrapper implements Config {
         return ConfigurationManager.getConfigInstance().getBoolean(key,defaultValue);
     }
 
+    @Override
+    public void setProperty(String key, Object value) {
+        ConfigurationManager.getConfigInstance().setProperty(key, value);
+    }
+
 }

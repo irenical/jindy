@@ -70,6 +70,9 @@ public class DumbTestFactory implements IConfigFactory {
             public boolean getBoolean(String key, boolean defaultValue) {
                 throw new UnsupportedOperationException();
             }
+
+            @Override
+            public void setProperty(String key, Object value) { throw new UnsupportedOperationException(); }
         };
     }
 

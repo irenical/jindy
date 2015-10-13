@@ -22,4 +22,11 @@ public class ArchaiusTest {
         Assert.assertNull(got.getString("myprop3"));
     }
 
+    @Test
+    public void testSetProperty() {
+        Config config = ConfigFactory.getConfig("application");
+        Assert.assertNull(config.getString("prop"));
+        config.setProperty("prop", "erty");
+        Assert.assertEquals(config.getString("prop"), "erty");
+    }
 }

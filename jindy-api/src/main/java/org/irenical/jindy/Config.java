@@ -93,5 +93,11 @@ public interface Config {
      * @return a string array
      */
     public String[] getStringArray(String key);
-    
+
+    /**
+     * Set a property, this will replace any previously set values.
+     * @param key the key/name of the property to alter
+     * @param value the value to be altered
+     */
+    public void setProperty(String key, Object value);
 }

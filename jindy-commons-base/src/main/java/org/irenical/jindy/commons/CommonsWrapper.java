@@ -83,4 +83,9 @@ public class CommonsWrapper implements Config {
         return config.getBoolean(key,defaultValue);
     }
 
+    @Override
+    public void setProperty(String key, Object value) {
+        config.setProperty(key, value);
+    }
+
 }

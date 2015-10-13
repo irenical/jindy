@@ -38,7 +38,7 @@
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-api</artifactId>
-      <version>1.0.0</version>
+      <version>1.1.0-SNAPSHOT</version>     <!-- TODO Change this to release version -->
     </dependency>
     <dependency>
       <groupId>com.netflix.archaius</groupId>

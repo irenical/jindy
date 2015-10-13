@@ -35,7 +35,7 @@ public class ApacheTestFactory implements IConfigFactory {
                 public String[] getStringArray(String key) {
                     throw new UnsupportedOperationException();
                 }
-    
+
                 @Override
                 public String getString(String key, String defaultValue) {
                     return config.getString(key, defaultValue);
@@ -78,6 +78,11 @@ public class ApacheTestFactory implements IConfigFactory {
     
                 @Override
                 public boolean getBoolean(String key, boolean defaultValue) {
+                    throw new UnsupportedOperationException();
+                }
+
+                @Override
+                public void setProperty(String key, Object value) {
                     throw new UnsupportedOperationException();
                 }
             };
