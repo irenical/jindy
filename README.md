@@ -57,3 +57,18 @@ All of that with dynamic behaviour
         }
     }
 ```
+
+To use Jindy you need both the API and an actual implementation in your classpath. Note that some bindings might not support all features, namely dynamic properties.
+
+```xml
+<dependency>
+    <groupId>org.irenical.jindy</groupId>
+    <artifactId>jindy-api</artifactId>
+    <version>1.1.0</version>
+</dependency>
+<dependency>
+    <groupId>org.irenical.jindy</groupId>
+    <artifactId>jindy-commons-impl</artifactId>
+    <version>1.1.0</version>
+</dependency>
+```
