@@ -10,7 +10,7 @@
 
   <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.1.2</version>
 
   <name>Jindy</name>
   <description>Jindy</description>

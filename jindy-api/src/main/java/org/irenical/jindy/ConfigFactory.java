@@ -10,15 +10,17 @@ import org.slf4j.LoggerFactory;
 
 public class ConfigFactory {
 
-  public static final String DEFAULT_CONFIG_NAME = "DEFAULT";
+  public static String DEFAULT_CONFIG_NAME;
 
-  private static final Logger LOG = LoggerFactory.getLogger(ConfigFactory.class);
+  private static Logger LOG;
 
   private static Map<String, Config> configs;
 
   private synchronized static void init() {
     if (configs == null) {
+      DEFAULT_CONFIG_NAME = "DEFAULT";
       configs = new ConcurrentHashMap<>();
+      LOG = LoggerFactory.getLogger(ConfigFactory.class);
     }
   }
 
