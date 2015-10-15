@@ -10,7 +10,7 @@
 
   <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy-api</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.1.2-SNAPSHOT</version>
 
   <name>Jindy API</name>
   <description>Jindy - Configuration API</description>
