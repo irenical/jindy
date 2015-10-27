@@ -75,7 +75,7 @@ public class CommonsWrapper implements Config {
 
     @Override
     public float getFloat(String key, float defaultValue) {
-        return getFloat(key, defaultValue);
+        return config.getFloat(key, defaultValue);
     }
 
     @Override
