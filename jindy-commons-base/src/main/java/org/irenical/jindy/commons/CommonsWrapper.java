@@ -21,12 +21,12 @@ public class CommonsWrapper implements Config {
     
     @Override
     public void unListen(ConfigChangedCallback callback) {
-        throw new UnsupportedOperationException();
+        // commons configuration is immutable, do nothing
     }
 
     @Override
     public void listen(String key, ConfigChangedCallback callback) {
-        throw new UnsupportedOperationException();
+        // commons configuration is immutable, do nothing
     }
 
     @Override
