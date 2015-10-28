@@ -21,12 +21,12 @@ public class CommonsWrapper implements Config {
     
     @Override
     public void unListen(ConfigChangedCallback callback) {
-        throw new UnsupportedOperationException();
+        // commons configuration is immutable, do nothing
     }
 
     @Override
     public void listen(String key, ConfigChangedCallback callback) {
-        throw new UnsupportedOperationException();
+        // commons configuration is immutable, do nothing
     }
 
     @Override
@@ -75,7 +75,7 @@ public class CommonsWrapper implements Config {
 
     @Override
     public float getFloat(String key, float defaultValue) {
-        return getFloat(key, defaultValue);
+        return config.getFloat(key, defaultValue);
     }
 
     @Override
