@@ -3,14 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.irenical.maven</groupId>
-    <artifactId>parent-root</artifactId>
-    <version>1.8.2</version>
+    <groupId>org.irenical.jindy</groupId>
+    <artifactId>jindy</artifactId>
+    <version>1.1.4-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy-commons-base</artifactId>
-  <version>1.1.3</version>
 
   <name>Jindy Commons Configuration</name>
   <description>A base commons configuration jindy implementation</description>
@@ -34,13 +32,30 @@
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-api</artifactId>
-      <version>1.1.3</version>
+      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>commons-configuration</groupId>
       <artifactId>commons-configuration</artifactId>
       <version>1.10</version>
     </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>logkit</groupId>
+          <artifactId>logkit</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>avalon-framework</groupId>
+          <artifactId>avalon-framework</artifactId>
+        </exclusion>
+      </exclusions>
+      <optional>true</optional>
+    </dependency>
+
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>

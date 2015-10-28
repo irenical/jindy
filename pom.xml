@@ -34,6 +34,7 @@
     <module>jindy-api</module>
     <module>jindy-commons-base</module>
     <module>jindy-archaius-base</module>
+    <module>jindy-commons-impl</module>
   </modules>
 
 </project>
