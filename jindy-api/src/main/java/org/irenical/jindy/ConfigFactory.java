@@ -151,6 +151,8 @@ public class ConfigFactory {
     if (configs != null) {
       configs.clear();
     }
+
+    defaultConfigFactory = null;
   }
 
 }
