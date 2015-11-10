@@ -23,6 +23,13 @@ public class JindyTest {
         ConfigFactory.getConfig();
     }
 
+    @Test
+    public void testFallbackBind() {
+        ConfigFactory.setDefaultConfigFactory(new DumbTestFactory());
+        Config got = ConfigFactory.getConfig();
+        Assert.assertNotNull(got);
+    }
+
     @Test(expected = ConfigBindingNotFoundException.class)
     public void testNamedNoBind() {
         ConfigFactory.getConfig("myconf");

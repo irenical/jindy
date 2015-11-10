@@ -16,6 +16,8 @@ public class ConfigFactory {
 
   private static Map<String, Config> configs;
 
+  private static IConfigFactory defaultConfigFactory;
+
   private synchronized static void init() {
     if (configs == null) {
       DEFAULT_CONFIG_NAME = "DEFAULT";
@@ -107,6 +109,12 @@ public class ConfigFactory {
       return got.createConfig(name);
     }
 
+    synchronized (ConfigFactory.class) {
+      if (defaultConfigFactory != null) {
+        return defaultConfigFactory.createConfig(name);
+      }
+    }
+
     // error on no binding
     log(false,"No bindings found. Make sure you have an implementation class declared in META-INF/services/" + IConfigFactory.class.getName(),null);
     throw new ConfigBindingNotFoundException("No bindings found. Make sure you have an implementation class declared in META-INF/services/" + IConfigFactory.class.getName());
@@ -132,6 +140,10 @@ public class ConfigFactory {
     return getConfig(null);
   }
 
+  public synchronized static void setDefaultConfigFactory(IConfigFactory factory) {
+    defaultConfigFactory = factory;
+  }
+
   /**
    * Discards all Config instances
    */
@@ -139,6 +151,8 @@ public class ConfigFactory {
     if (configs != null) {
       configs.clear();
     }
+
+    defaultConfigFactory = null;
   }
 
 }
