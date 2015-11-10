@@ -35,6 +35,7 @@
     <module>jindy-commons-base</module>
     <module>jindy-archaius-base</module>
     <module>jindy-commons-impl</module>
+    <module>jindy-archaius-consul</module>
   </modules>
 
 </project>
