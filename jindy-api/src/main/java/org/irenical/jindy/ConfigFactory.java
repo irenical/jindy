@@ -17,6 +17,7 @@ public class ConfigFactory {
   private static Map<String, Config> configs;
 
   private static IConfigFactory defaultConfigFactory;
+  private static volatile String defaultAppName;
 
   private synchronized static void init() {
     if (configs == null) {
@@ -40,7 +41,7 @@ public class ConfigFactory {
   }
 
   /**
-   * Returns a Config instance, instanciating it on first call. If no factory
+   * Returns a Config instance, instantiating it on first call. If no factory
    * implementation is provided, one will be searched using Service Loader If a
    * Config with given name already exists, it will be simply returned
    * 
@@ -144,15 +145,24 @@ public class ConfigFactory {
     defaultConfigFactory = factory;
   }
 
-  /**
-   * Discards all Config instances
-   */
-  public static void clear() {
+  public static void setDefaultAppName(String appName) {
+    defaultAppName = appName;
+  }
+
+  public static String getDefaultAppName() {
+    return defaultAppName;
+  }
+
+    /**
+     * Discards all Config instances
+     */
+  public synchronized static void clear() {
     if (configs != null) {
       configs.clear();
     }
 
     defaultConfigFactory = null;
+    defaultAppName = null;
   }
 
 }
