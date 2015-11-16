@@ -36,9 +36,8 @@ public abstract class ArchaiusBaseFactory implements IConfigFactory {
 
   private void init() {
     AbstractConfiguration abstractConfig = getConfiguration();
-    abstractConfig.addConfigurationListener(new ConfigurationListener() {
-      @Override
-      public void configurationChanged(ConfigurationEvent event) {
+    abstractConfig.addConfigurationListener(event -> {
+      if(!event.isBeforeUpdate()) {
         config.fire(event.getPropertyName());
       }
     });
