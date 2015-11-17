@@ -5,7 +5,7 @@ import com.netflix.config.DynamicConfiguration;
 public class ArchaiusConfigurationExample extends ArchaiusBaseFactory {
     
     @Override
-    protected DynamicConfiguration getDynamicConfiguration() {
+    protected DynamicConfiguration getConfiguration() {
         return new DynamicConfiguration();
     }
 
