@@ -23,10 +23,10 @@ public class ArchaiusConsulFactory extends ArchaiusBaseFactory {
 
   @Override
   protected DynamicWatchedConfiguration getConfiguration() {
-    String appName = Optional.ofNullable(ConfigurationManager.getDeploymentContext().getApplicationId()).orElse(ConfigFactory.getDefaultAppName());
+    String appName = Optional.ofNullable(ConfigurationManager.getDeploymentContext().getApplicationId()).orElse(ConfigFactory.getContext() == null ? null : ConfigFactory.getContext().getApplicationId());
 
     if (appName == null) {
-      throw new RuntimeException(DeploymentContext.ContextKey.appId.getKey() + " was not set and no default app name set");
+      throw new RuntimeException(DeploymentContext.ContextKey.appId.getKey() + " was not set and no app name set");
     }
 
     AbstractConfiguration config = ConfigurationManager.getConfigInstance();

@@ -17,7 +17,8 @@ public class ConfigFactory {
   private static Map<String, Config> configs;
 
   private static IConfigFactory defaultConfigFactory;
-  private static volatile String defaultAppName;
+  
+  private volatile static ConfigContext context;
 
   private synchronized static void init() {
     if (configs == null) {
@@ -140,17 +141,17 @@ public class ConfigFactory {
   public static Config getConfig() {
     return getConfig(null);
   }
+  
+  public static void setContext(ConfigContext context) {
+    ConfigFactory.context = context;
+  }
+  
+  public static ConfigContext getContext() {
+    return context;
+  }
 
   public synchronized static void setDefaultConfigFactory(IConfigFactory factory) {
     defaultConfigFactory = factory;
-  }
-
-  public static void setDefaultAppName(String appName) {
-    defaultAppName = appName;
-  }
-
-  public static String getDefaultAppName() {
-    return defaultAppName;
   }
 
     /**
@@ -162,7 +163,7 @@ public class ConfigFactory {
     }
 
     defaultConfigFactory = null;
-    defaultAppName = null;
+    context = null;
   }
 
 }
