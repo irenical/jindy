@@ -4,12 +4,12 @@
   <parent>
     <artifactId>jindy</artifactId>
     <groupId>org.irenical.jindy</groupId>
-    <version>1.1.9-SNAPSHOT</version>
+    <version>1.1.9</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>jindy-archaius-consul</artifactId>
-  <version>1.1.9-SNAPSHOT</version>
+  <version>1.1.9</version>
 
   <dependencies>
     <dependency>
@@ -25,7 +25,7 @@
     <dependency>
       <groupId>org.irenical.consul</groupId>
       <artifactId>archaius-consul</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>

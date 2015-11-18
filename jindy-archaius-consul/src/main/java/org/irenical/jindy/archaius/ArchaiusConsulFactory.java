@@ -30,10 +30,10 @@ public class ArchaiusConsulFactory extends ArchaiusBaseFactory {
     String consulAclToken = config.getString(CONSUL_TOKEN);
     String rootConfigPath = null;
 
-    Optional<ConsulConfigStrategy> strategy = findStrategy();
+    ConsulConfigStrategy strategy = findStrategy();
 
-    if (strategy.isPresent()) {
-      rootConfigPath = strategy.get().getBasePath(new CommonsWrapper(config));
+    if (strategy != null) {
+      rootConfigPath = strategy.getBasePath(new CommonsWrapper(config));
     } else {
       String appName = Optional.ofNullable(ConfigurationManager.getDeploymentContext().getApplicationId()).orElse(ConfigFactory.getContext() == null ? null : ConfigFactory.getContext().getApplicationId());
 
@@ -57,10 +57,10 @@ public class ArchaiusConsulFactory extends ArchaiusBaseFactory {
     return new DynamicWatchedConfiguration(configSource);
   }
 
-  private Optional<ConsulConfigStrategy> findStrategy() {
+  private ConsulConfigStrategy findStrategy() {
     ServiceLoader<ConsulConfigStrategy> sl = ServiceLoader.load(ConsulConfigStrategy.class);
     for (ConsulConfigStrategy consulConfigStrategy : sl) {
-      return Optional.of(consulConfigStrategy);
+      return consulConfigStrategy;
     }
     return null;
   }
