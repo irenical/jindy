@@ -4,6 +4,7 @@ import com.boundary.config.ConsulWatchedConfigurationSource;
 import com.ecwid.consul.v1.ConsulClient;
 import com.netflix.config.ConfigurationManager;
 import com.netflix.config.DeploymentContext;
+import com.netflix.config.DynamicConfiguration;
 import com.netflix.config.DynamicWatchedConfiguration;
 
 import org.apache.commons.configuration.AbstractConfiguration;
@@ -22,18 +23,18 @@ public class ArchaiusConsulFactory extends ArchaiusBaseFactory {
   public static final String CONSUL_DEFAULT_HOST = "consul.service.consul";
 
   @Override
-  protected DynamicWatchedConfiguration getConfiguration() {
-
-    AbstractConfiguration config = ConfigurationManager.getConfigInstance();
-    String consulHost = config.getString(CONSUL_HOST, CONSUL_DEFAULT_HOST);
-    int consulPort = config.getInt(CONSUL_PORT, 8500);
-    String consulAclToken = config.getString(CONSUL_TOKEN);
-    String rootConfigPath = null;
+  protected AbstractConfiguration getConfiguration() {
 
     ConsulConfigStrategy strategy = findStrategy();
-
+    
+    AbstractConfiguration config = ConfigurationManager.getConfigInstance();
+    String rootConfigPath = null;
     if (strategy != null) {
-      rootConfigPath = strategy.getBasePath(new CommonsWrapper(config));
+      CommonsWrapper commonsConfig = new CommonsWrapper(config);
+      if(strategy.bypassConsul(commonsConfig)){
+        return new DynamicConfiguration();
+      }
+      rootConfigPath = strategy.getBasePath(commonsConfig);
     } else {
       String appName = Optional.ofNullable(ConfigurationManager.getDeploymentContext().getApplicationId()).orElse(ConfigFactory.getContext() == null ? null : ConfigFactory.getContext().getApplicationId());
 
@@ -42,6 +43,10 @@ public class ArchaiusConsulFactory extends ArchaiusBaseFactory {
       }
       rootConfigPath = appName;
     }
+    
+    String consulHost = config.getString(CONSUL_HOST, CONSUL_DEFAULT_HOST);
+    int consulPort = config.getInt(CONSUL_PORT, 8500);
+    String consulAclToken = config.getString(CONSUL_TOKEN);
 
     ConsulWatchedConfigurationSource configSource = new ConsulWatchedConfigurationSource(rootConfigPath, new ConsulClient(consulHost, consulPort), 30, TimeUnit.SECONDS, consulAclToken);
 
