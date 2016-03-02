@@ -83,10 +83,10 @@ public class ArchaiusWrapper implements Config {
 
   private void firePrefixOrSuffix(String key) {
     for (String k : new LinkedList<>(callbacksByMatch.keySet())) {
-      if (k.startsWith(key)) {
+      if (key.startsWith(k)) {
         fireMatch(key, Match.PREFIX);
       }
-      if (k.endsWith(key)) {
+      if (key.endsWith(k)) {
         fireMatch(key, Match.SUFFIX);
       }
     }
