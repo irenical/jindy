@@ -96,6 +96,11 @@ public class DumbTestFactory implements IConfigFactory {
       public void listen(String key, PropertyChangedCallback callback) {
         throw new UnsupportedOperationException();
       }
+
+      @Override
+      public Config filterPrefix(String prefix) {
+        throw new UnsupportedOperationException();
+      }
     };
   }
 

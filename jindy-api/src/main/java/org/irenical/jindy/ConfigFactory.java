@@ -1,12 +1,12 @@
 package org.irenical.jindy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ConfigFactory {
 
@@ -42,6 +42,26 @@ public class ConfigFactory {
   }
 
   /**
+   * Returns the default Config, same as getConfig(null)
+   *
+   * @return the default Config instance
+   */
+  public static Config getConfig() {
+    return getConfig(null);
+  }
+
+  /**
+   * Returns Config for given name, same as getConfig(name,null)
+   *
+   * @param name
+   *          - the Config name
+   * @return the Config instance for given name
+   */
+  public static Config getConfig(String name) {
+    return getConfig(name, null);
+  }
+
+  /**
    * Returns a Config instance, instantiating it on first call. If no factory
    * implementation is provided, one will be searched using Service Loader If a
    * Config with given name already exists, it will be simply returned
@@ -59,6 +79,7 @@ public class ConfigFactory {
     if (name == null) {
       name = DEFAULT_CONFIG_NAME;
     }
+
     Config got = configs.get(name);
     if (got == null) {
       log(true,"No Config instance named " + name + "... requesting a new one",null);
@@ -120,26 +141,6 @@ public class ConfigFactory {
     // error on no binding
     log(false,"No bindings found. Make sure you have an implementation class declared in META-INF/services/" + IConfigFactory.class.getName(),null);
     throw new ConfigBindingNotFoundException("No bindings found. Make sure you have an implementation class declared in META-INF/services/" + IConfigFactory.class.getName());
-  }
-
-  /**
-   * Returns Config for given name, same as getConfig(name,null)
-   * 
-   * @param name
-   *          - the Config name
-   * @return the Config instance for given name
-   */
-  public static Config getConfig(String name) {
-    return getConfig(name, null);
-  }
-
-  /**
-   * Returns the default Config, same as getConfig(null)
-   * 
-   * @return the default Config instance
-   */
-  public static Config getConfig() {
-    return getConfig(null);
   }
   
   public static void setContext(ConfigContext context) {

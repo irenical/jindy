@@ -1,22 +1,27 @@
 package org.irenical.jindy.archaius;
 
-import java.util.Iterator;
+import org.apache.commons.configuration.Configuration;
+import org.irenical.jindy.Config;
+import org.irenical.jindy.ConfigChangedCallback;
+import org.irenical.jindy.ConfigNotFoundException;
+import org.irenical.jindy.PropertyChangedCallback;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.irenical.jindy.Config;
-import org.irenical.jindy.ConfigChangedCallback;
-import org.irenical.jindy.ConfigNotFoundException;
-import org.irenical.jindy.PropertyChangedCallback;
-
-import com.netflix.config.ConfigurationManager;
 
 public class ArchaiusWrapper implements Config {
 
   private final Map<String, Map<Match, List<Object>>> callbacksByMatch = new ConcurrentHashMap<>();
+
+  private final Configuration configuration;
+
+  public ArchaiusWrapper(Configuration configuration) {
+    this.configuration = configuration;
+  }
 
   private List<Object> getCallbacks(String key, Match match) {
     if (match == null) {
@@ -95,8 +100,7 @@ public class ArchaiusWrapper implements Config {
   private void fireMatch(String key, Match match) {
     List<Object> callbacks = getCallbacks(key, match);
     if (callbacks != null) {
-      for (int i = 0; i < callbacks.size(); ++i) {
-        Object callback = callbacks.get(i);
+      for (Object callback : callbacks) {
         if (callback instanceof PropertyChangedCallback) {
           ((PropertyChangedCallback) callback).propertyChanged(key);
         } else if (callback instanceof ConfigChangedCallback) {
@@ -109,79 +113,77 @@ public class ArchaiusWrapper implements Config {
   }
 
   private void assertKey(String key) throws ConfigNotFoundException {
-    if (!ConfigurationManager.getConfigInstance().containsKey(key)) {
+    if (!configuration.containsKey(key)) {
       throw new ConfigNotFoundException("Mandatory configuration property '" + key + "' was not found");
     }
   }
 
   @Override
   public String[] getStringArray(String key) {
-    return ConfigurationManager.getConfigInstance().getStringArray(key);
+    return configuration.getStringArray(key);
   }
 
   @Override
   public String getString(String key, String defaultValue) {
-    return ConfigurationManager.getConfigInstance().getString(key, defaultValue);
+    return configuration.getString(key, defaultValue);
   }
 
   @Override
   public String getString(String key) {
-    return ConfigurationManager.getConfigInstance().getString(key);
+    return configuration.getString(key);
   }
 
   @Override
   public String getMandatoryString(String key) throws ConfigNotFoundException {
     assertKey(key);
-    return ConfigurationManager.getConfigInstance().getString(key);
+    return configuration.getString(key);
   }
 
   @Override
   public int getMandatoryInt(String key) throws ConfigNotFoundException {
     assertKey(key);
-    return ConfigurationManager.getConfigInstance().getInt(key);
+    return configuration.getInt(key);
   }
 
   @Override
   public float getMandatoryFloat(String key) throws ConfigNotFoundException {
     assertKey(key);
-    return ConfigurationManager.getConfigInstance().getFloat(key);
+    return configuration.getFloat(key);
   }
 
   @Override
   public boolean getMandatoryBoolean(String key) throws ConfigNotFoundException {
     assertKey(key);
-    return ConfigurationManager.getConfigInstance().getBoolean(key);
+    return configuration.getBoolean(key);
   }
 
   @Override
   public int getInt(String key, int defaultValue) {
-    return ConfigurationManager.getConfigInstance().getInt(key, defaultValue);
+    return configuration.getInt(key, defaultValue);
   }
 
   @Override
   public float getFloat(String key, float defaultValue) {
-    return getFloat(key, defaultValue);
+    return configuration.getFloat(key, defaultValue);
   }
 
   @Override
   public boolean getBoolean(String key, boolean defaultValue) {
-    return ConfigurationManager.getConfigInstance().getBoolean(key, defaultValue);
+    return configuration.getBoolean(key, defaultValue);
   }
 
   @Override
   public void setProperty(String key, Object value) {
-    ConfigurationManager.getConfigInstance().setProperty(key, value);
+    configuration.setProperty(key, value);
   }
 
   @Override
   public Iterable<String> getKeys(String keyPrefix) {
-    return new Iterable<String>() {
-
-      @Override
-      public Iterator<String> iterator() {
-        return keyPrefix == null ? ConfigurationManager.getConfigInstance().getKeys() : ConfigurationManager.getConfigInstance().getKeys(keyPrefix);
-      }
-    };
+    return () -> keyPrefix == null ? configuration.getKeys() : configuration.getKeys(keyPrefix);
   }
 
+  @Override
+  public Config filterPrefix(String prefix) {
+    return new ArchaiusWrapper( configuration.subset(prefix) );
+  }
 }

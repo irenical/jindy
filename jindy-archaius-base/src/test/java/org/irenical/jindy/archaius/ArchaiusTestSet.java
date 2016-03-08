@@ -12,6 +12,19 @@ public class ArchaiusTestSet {
         Config config = ConfigFactory.getConfig("application");
         Assert.assertNull(config.getString("prop"));
         config.setProperty("prop", "erty");
-        Assert.assertEquals(config.getString("prop"), "erty");
+        Assert.assertEquals("erty", config.getString("prop"));
+    }
+
+    @Test
+    public void testPrefixed() throws Exception {
+        Config config = ConfigFactory.getConfig("application");
+
+        Config prefix1 = config.filterPrefix("prefix1");
+        Assert.assertEquals("one-prefixed", prefix1.getString("myprop1"));
+        prefix1.setProperty("myprop1", "qwerty");
+        Assert.assertEquals("qwerty", prefix1.getString("myprop1"));
+
+        Assert.assertEquals("one", config.getString("myprop1"));
+        Assert.assertEquals("qwerty", config.getString("prefix1.myprop1"));
     }
 }

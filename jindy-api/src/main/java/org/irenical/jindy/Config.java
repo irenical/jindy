@@ -190,4 +190,12 @@ public interface Config {
    */
   public Iterable<String> getKeys(String keyPrefix);
 
+  /**
+   * Returns a Config instance with the prefixed properties
+   * @param prefix
+   *            the properties prefix to filter
+   * @return  a subset config
+     */
+  public Config filterPrefix(String prefix);
+
 }

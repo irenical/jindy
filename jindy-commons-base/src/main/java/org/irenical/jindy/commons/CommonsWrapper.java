@@ -1,7 +1,5 @@
 package org.irenical.jindy.commons;
 
-import java.util.Iterator;
-
 import org.apache.commons.configuration.Configuration;
 import org.irenical.jindy.Config;
 import org.irenical.jindy.ConfigChangedCallback;
@@ -108,12 +106,11 @@ public class CommonsWrapper implements Config {
 
   @Override
   public Iterable<String> getKeys(String keyPrefix) {
-    return new Iterable<String>() {
-      @Override
-      public Iterator<String> iterator() {
-        return keyPrefix == null ? config.getKeys() : config.getKeys(keyPrefix);
-      }
-    };
+    return () -> keyPrefix == null ? config.getKeys() : config.getKeys(keyPrefix);
   }
 
+  @Override
+  public Config filterPrefix(String prefix) {
+    return new CommonsWrapper(config.subset(prefix));
+  }
 }

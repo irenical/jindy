@@ -55,10 +55,27 @@ public class JindyTest {
     @Test
     public void testACCFile(){
         Config got = ConfigFactory.getConfig("myconf",new ApacheTestFactory());
-        Assert.assertEquals(got.getString("myprop1"), "one");
-        Assert.assertEquals(got.getString("myprop2"), "2");
-        Assert.assertEquals(got.getInt("myprop2",0), 2);
+        Assert.assertEquals("one", got.getString("myprop1"));
+        Assert.assertEquals("2", got.getString("myprop2"));
+        Assert.assertEquals(2, got.getInt("myprop2",0));
         Assert.assertNull(got.getString("myprop3"));
+    }
+
+    @Test
+    public void testPrefixed() throws Exception {
+        Config got = ConfigFactory.getConfig("test", new ApacheTestFactory());
+        Assert.assertEquals("one", got.getString("myprop1"));
+        Assert.assertEquals("prefixed-one-myprop", got.getString("prefix1.myprop1"));
+
+        Config prefix1 = got.filterPrefix("prefix1");
+        Assert.assertNotNull(prefix1);
+        Assert.assertEquals("prefixed-one-myprop", prefix1.getString("myprop1"));
+        Assert.assertNull(prefix1.getString("myprop2"));
+
+        Config prefix2 = got.filterPrefix("prefix2");
+        Assert.assertNotNull(prefix2);
+        Assert.assertEquals("prefixed-two-myprop", prefix2.getString("myprop1"));
+        Assert.assertEquals("prefixed-2", prefix2.getString("myprop2"));
     }
 
 }

@@ -1,11 +1,10 @@
 package org.irenical.jindy.archaius;
 
+import com.netflix.config.ConcurrentCompositeConfiguration;
+import com.netflix.config.ConfigurationManager;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.irenical.jindy.Config;
 import org.irenical.jindy.IConfigFactory;
-
-import com.netflix.config.ConcurrentCompositeConfiguration;
-import com.netflix.config.ConfigurationManager;
 
 /**
  * Creates a Netflix's Archaius based Config factory The returned config is a singleton
@@ -26,7 +25,7 @@ public abstract class ArchaiusBaseFactory implements IConfigFactory {
     synchronized (ArchaiusBaseFactory.class) {
       if (config == null) {
         init();
-        config = new ArchaiusWrapper();
+        config = new ArchaiusWrapper(ConfigurationManager.getConfigInstance());
       }
     }
     return config;
