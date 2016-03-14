@@ -1,6 +1,7 @@
 package org.irenical.jindy.archaius;
 
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.event.EventSource;
 import org.irenical.jindy.Config;
 import org.irenical.jindy.ConfigChangedCallback;
 import org.irenical.jindy.ConfigNotFoundException;
@@ -184,6 +185,14 @@ public class ArchaiusWrapper implements Config {
 
   @Override
   public Config filterPrefix(String prefix) {
-    return new ArchaiusWrapper( configuration.subset(prefix) );
+    Configuration subset = configuration.subset(prefix);
+    ArchaiusWrapper wrapper = new ArchaiusWrapper(subset);
+
+    if ( subset instanceof EventSource ) {
+      ((EventSource) subset).addConfigurationListener(event -> wrapper.fire( event.getPropertyName() ));
+    }
+
+    return wrapper;
   }
+
 }
