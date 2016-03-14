@@ -67,7 +67,11 @@ public class ArchaiusWrapper implements Config {
     if (callback == null) {
       throw new IllegalArgumentException("Callback cannot be null");
     }
-    getCallbacks(prefix + key, keyMatchingRule).add(callback);
+    PropertyChangedCallback prefixedCallback = null;
+    if(parent!=null){
+      prefixedCallback = (k)->{callback.propertyChanged(k.substring(prefix.length()));};
+    }
+    getCallbacks(prefix + key, keyMatchingRule).add(prefixedCallback == null ? callback : prefixedCallback);
   }
 
   @Override
