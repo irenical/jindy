@@ -1,17 +1,16 @@
 package org.irenical.jindy.archaius;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.event.EventSource;
-import org.irenical.jindy.Config;
-import org.irenical.jindy.ConfigChangedCallback;
-import org.irenical.jindy.ConfigNotFoundException;
-import org.irenical.jindy.PropertyChangedCallback;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.apache.commons.configuration.Configuration;
+import org.irenical.jindy.Config;
+import org.irenical.jindy.ConfigChangedCallback;
+import org.irenical.jindy.ConfigNotFoundException;
+import org.irenical.jindy.PropertyChangedCallback;
 
 
 public class ArchaiusWrapper implements Config {
@@ -19,9 +18,12 @@ public class ArchaiusWrapper implements Config {
   private final Map<String, Map<Match, List<Object>>> callbacksByMatch = new ConcurrentHashMap<>();
 
   private final Configuration configuration;
+  
+  private final String prefix;
 
-  public ArchaiusWrapper(Configuration configuration) {
+  public ArchaiusWrapper(String prefix, Configuration configuration) {
     this.configuration = configuration;
+    this.prefix = prefix == null ? "" : prefix;
   }
 
   private List<Object> getCallbacks(String key, Match match) {
@@ -50,12 +52,12 @@ public class ArchaiusWrapper implements Config {
     if (callback == null) {
       throw new IllegalArgumentException("Callback cannot be null");
     }
-    getCallbacks(key, keyMatchingRule).add(callback);
+    getCallbacks(prefix+key, keyMatchingRule).add(callback);
   }
 
   @Override
   public void listen(String key, PropertyChangedCallback callback) {
-    listen(key, Match.EXACT, callback);
+    listen(prefix+key, Match.EXACT, callback);
   }
 
   @Override
@@ -63,12 +65,12 @@ public class ArchaiusWrapper implements Config {
     if (callback == null) {
       throw new IllegalArgumentException("Callback cannot be null");
     }
-    getCallbacks(key, keyMatchingRule).add(callback);
+    getCallbacks(prefix+key, keyMatchingRule).add(callback);
   }
 
   @Override
   public void listen(String key, ConfigChangedCallback callback) {
-    listen(key, Match.EXACT, callback);
+    listen(prefix+key, Match.EXACT, callback);
   }
 
   @Override
@@ -83,8 +85,8 @@ public class ArchaiusWrapper implements Config {
   }
 
   protected void fire(String key) {
-    fireMatch(key, Match.EXACT);
-    firePrefixOrSuffix(key);
+    fireMatch(prefix+key, Match.EXACT);
+    firePrefixOrSuffix(prefix+key);
   }
 
   private void firePrefixOrSuffix(String key) {
@@ -121,78 +123,75 @@ public class ArchaiusWrapper implements Config {
 
   @Override
   public String[] getStringArray(String key) {
-    return configuration.getStringArray(key);
+    return configuration.getStringArray(prefix+key);
   }
 
   @Override
   public String getString(String key, String defaultValue) {
-    return configuration.getString(key, defaultValue);
+    return configuration.getString(prefix+key, defaultValue);
   }
 
   @Override
   public String getString(String key) {
-    return configuration.getString(key);
+    return configuration.getString(prefix+key);
   }
 
   @Override
   public String getMandatoryString(String key) throws ConfigNotFoundException {
+    key=prefix+key;
     assertKey(key);
     return configuration.getString(key);
   }
 
   @Override
   public int getMandatoryInt(String key) throws ConfigNotFoundException {
+    key=prefix+key;
     assertKey(key);
     return configuration.getInt(key);
   }
 
   @Override
   public float getMandatoryFloat(String key) throws ConfigNotFoundException {
+    key=prefix+key;
     assertKey(key);
     return configuration.getFloat(key);
   }
 
   @Override
   public boolean getMandatoryBoolean(String key) throws ConfigNotFoundException {
+    key=prefix+key;
     assertKey(key);
     return configuration.getBoolean(key);
   }
 
   @Override
   public int getInt(String key, int defaultValue) {
-    return configuration.getInt(key, defaultValue);
+    return configuration.getInt(prefix+key, defaultValue);
   }
 
   @Override
   public float getFloat(String key, float defaultValue) {
-    return configuration.getFloat(key, defaultValue);
+    return configuration.getFloat(prefix+key, defaultValue);
   }
 
   @Override
   public boolean getBoolean(String key, boolean defaultValue) {
-    return configuration.getBoolean(key, defaultValue);
+    return configuration.getBoolean(prefix+key, defaultValue);
   }
 
   @Override
   public void setProperty(String key, Object value) {
-    configuration.setProperty(key, value);
+    configuration.setProperty(prefix+key, value);
   }
 
   @Override
   public Iterable<String> getKeys(String keyPrefix) {
-    return () -> keyPrefix == null ? configuration.getKeys() : configuration.getKeys(keyPrefix);
+    return () -> keyPrefix == null ? (prefix == null ? configuration.getKeys() : configuration.getKeys(prefix) ) : configuration.getKeys(prefix+keyPrefix);
   }
 
   @Override
   public Config filterPrefix(String prefix) {
-    Configuration subset = configuration.subset(prefix);
-    ArchaiusWrapper wrapper = new ArchaiusWrapper(subset);
-
-    if ( subset instanceof EventSource ) {
-      ((EventSource) subset).addConfigurationListener(event -> wrapper.fire( event.getPropertyName() ));
-    }
-
-    return wrapper;
+    return new ArchaiusWrapper((prefix == null || prefix.endsWith(".")) ? prefix : (prefix + "."), configuration);
   }
 
 }
