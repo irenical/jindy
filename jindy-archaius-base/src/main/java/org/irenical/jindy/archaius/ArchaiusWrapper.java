@@ -72,7 +72,7 @@ public class ArchaiusWrapper implements Config {
 
   @Override
   public void listen(String key, PropertyChangedCallback callback) {
-    listen(prefix + key, Match.EXACT, callback);
+    listen(key, Match.EXACT, callback);
   }
 
   @Override
@@ -85,7 +85,7 @@ public class ArchaiusWrapper implements Config {
 
   @Override
   public void listen(String key, ConfigChangedCallback callback) {
-    listen(prefix + key, Match.EXACT, callback);
+    listen(key, Match.EXACT, callback);
   }
 
   @Override
