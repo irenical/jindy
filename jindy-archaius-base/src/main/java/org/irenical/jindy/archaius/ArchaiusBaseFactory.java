@@ -25,7 +25,7 @@ public abstract class ArchaiusBaseFactory implements IConfigFactory {
     synchronized (ArchaiusBaseFactory.class) {
       if (config == null) {
         init();
-        config = new ArchaiusWrapper(null, ConfigurationManager.getConfigInstance());
+        config = new ArchaiusWrapper(ConfigurationManager.getConfigInstance());
       }
     }
     return config;
