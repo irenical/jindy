@@ -9,6 +9,7 @@
     <version>1.8.2</version>
   </parent>
 
+  <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy-archaius-consul</artifactId>
   <version>1.4.2</version>
 
