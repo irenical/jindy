@@ -6,7 +6,7 @@
   <parent>
     <artifactId>jindy</artifactId>
     <groupId>org.irenical.jindy</groupId>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
   </parent>
 
   <artifactId>jindy-archaius-consul</artifactId>
