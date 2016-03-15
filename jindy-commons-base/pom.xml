@@ -3,12 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.irenical.jindy</groupId>
-    <artifactId>jindy</artifactId>
-    <version>1.4.1</version>
+    <groupId>org.irenical.maven</groupId>
+    <artifactId>parent-root</artifactId>
+    <version>1.8.2</version>
   </parent>
 
   <artifactId>jindy-commons-base</artifactId>
+  <version>1.4.2</version>
 
   <name>Jindy Commons Configuration</name>
   <description>A base commons configuration jindy implementation</description>
@@ -32,7 +33,7 @@
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-api</artifactId>
-      <version>${project.parent.version}</version>
+      <version>1.4.2</version>
     </dependency>
     <dependency>
       <groupId>commons-configuration</groupId>

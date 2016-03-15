@@ -4,23 +4,24 @@
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
-    <artifactId>jindy</artifactId>
-    <groupId>org.irenical.jindy</groupId>
-    <version>1.4.1</version>
+    <groupId>org.irenical.maven</groupId>
+    <artifactId>parent-root</artifactId>
+    <version>1.8.2</version>
   </parent>
 
   <artifactId>jindy-archaius-consul</artifactId>
+  <version>1.4.2</version>
 
   <dependencies>
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-archaius-base</artifactId>
-      <version>${project.parent.version}</version>
+      <version>1.4.2</version>
     </dependency>
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-commons-base</artifactId>
-      <version>${project.parent.version}</version>
+      <version>1.4.2</version>
     </dependency>
     <dependency>
       <groupId>org.irenical.consul</groupId>
