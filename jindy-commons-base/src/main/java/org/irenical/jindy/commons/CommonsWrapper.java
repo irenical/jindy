@@ -113,4 +113,15 @@ public class CommonsWrapper implements Config {
   public Config filterPrefix(String prefix) {
     return new CommonsWrapper(config.subset(prefix));
   }
+
+  @Override
+  public void clearProperty(String key) {
+    config.clearProperty(key);
+  }
+
+  @Override
+  public void clear() {
+    config.clear();
+  }
+
 }

@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <parent>
     <groupId>org.irenical.maven</groupId>
     <artifactId>parent-root</artifactId>
@@ -11,18 +11,18 @@
 
   <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy-archaius-consul</artifactId>
-  <version>1.4.2</version>
+  <version>1.5.0</version>
 
   <dependencies>
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-archaius-base</artifactId>
-      <version>1.4.2</version>
+      <version>1.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-commons-base</artifactId>
-      <version>1.4.2</version>
+      <version>1.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.irenical.consul</groupId>
