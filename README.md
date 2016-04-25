@@ -68,12 +68,12 @@ support all features, namely dynamic properties.
 <dependency>
     <groupId>org.irenical.jindy</groupId>
     <artifactId>jindy-api</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
 </dependency>
 <dependency>
     <groupId>org.irenical.jindy</groupId>
     <artifactId>jindy-commons-impl</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
 </dependency>
 ```
 
