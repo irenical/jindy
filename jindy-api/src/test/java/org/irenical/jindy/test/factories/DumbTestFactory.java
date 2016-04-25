@@ -101,6 +101,17 @@ public class DumbTestFactory implements IConfigFactory {
       public Config filterPrefix(String prefix) {
         throw new UnsupportedOperationException();
       }
+      
+      @Override
+      public void clearProperty(String key) {
+        throw new UnsupportedOperationException();
+      }
+      
+      @Override
+      public void clear() {
+        throw new UnsupportedOperationException();
+      }
+      
     };
   }
 

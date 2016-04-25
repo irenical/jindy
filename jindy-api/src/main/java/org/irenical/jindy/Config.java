@@ -8,7 +8,7 @@ public interface Config {
   public enum Match {
     EXACT, PREFIX, SUFFIX
   }
-  
+
   /**
    * Registers a listener on given property. It will be call whenever the
    * property's value is changed
@@ -182,6 +182,19 @@ public interface Config {
   public void setProperty(String key, Object value);
 
   /**
+   * Remove a property from the configuration.
+   *
+   * @param key
+   *          the key to remove along with corresponding value.
+   */
+  void clearProperty(String key);
+
+  /**
+   * Remove all properties from the configuration.
+   */
+  void clear();
+
+  /**
    * Get the list of the keys contained in the configuration. The returned
    * iterable can be used to obtain all defined keys.
    * 
@@ -192,10 +205,11 @@ public interface Config {
 
   /**
    * Returns a Config instance with the prefixed properties
+   * 
    * @param prefix
-   *            the properties prefix to filter
-   * @return  a subset config
-     */
+   *          the properties prefix to filter
+   * @return a subset config
+   */
   public Config filterPrefix(String prefix);
 
 }

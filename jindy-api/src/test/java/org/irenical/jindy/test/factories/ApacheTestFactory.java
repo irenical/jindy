@@ -110,6 +110,16 @@ public class ApacheTestFactory implements IConfigFactory {
     public Config filterPrefix(String prefix) {
       return new ApacheTestConfig( config.subset(prefix) );
     }
+    
+    @Override
+    public void clearProperty(String key) {
+      throw new UnsupportedOperationException();
+    }
+    
+    @Override
+    public void clear() {
+      throw new UnsupportedOperationException();
+    }
   }
 
   @Override
