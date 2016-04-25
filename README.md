@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/irenical/jindy.svg?branch=master)](https://travis-ci.org/irenical/jindy)
+[![][maven img]][maven]
+[![][travis img]][travis]
 
 Jindy is a configuration API for Java.
 
@@ -75,3 +76,9 @@ support all features, namely dynamic properties.
     <version>1.4.0</version>
 </dependency>
 ```
+
+[maven]:http://search.maven.org/#search|gav|1|g:"org.irenical.jindy"%20AND%20a:"jindy-api"
+[maven img]:https://maven-badges.herokuapp.com/maven-central/org.irenical.jindy/jindy-api/badge.svg
+
+[travis]:https://travis-ci.org/irenical/jindy
+[travis img]:https://travis-ci.org/irenical/jindy.svg?branch=master
