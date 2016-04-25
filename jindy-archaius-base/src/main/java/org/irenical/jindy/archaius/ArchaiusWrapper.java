@@ -212,5 +212,15 @@ public class ArchaiusWrapper implements Config {
   public Config filterPrefix(String prefix) {
     return new ArchaiusWrapper((prefix == null || prefix.endsWith(".")) ? prefix : (prefix + "."), this);
   }
+  
+  @Override
+  public void clearProperty(String key) {
+    configuration.clearProperty(key);
+  }
+  
+  @Override
+  public void clear() {
+    configuration.clear();
+  }
 
 }
