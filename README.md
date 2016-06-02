@@ -1,22 +1,24 @@
 [![][maven img]][maven]
 [![][travis img]][travis]
 
+### What and Why
 Jindy is a configuration API for Java.
 
-Whether you use a database, a properties file or framework (such as Apache Commons Configuration, Netflix's Archaius 
-or one of your own), chances are you are forced to know which while you code your stuff. Much like in logging, 
+Whether you use a database, a properties file or framework such as Apache Commons Configuration, Netflix's Archaius 
+or one of your own, chances are you are forced to know which while you code your stuff. Much like in logging, 
 configuration is needed in pretty much everything you do, and much like in logging you probably only need a simple 
 stable API.
 
 Jindy tries to solve this, by offering a simple API and a way to bind your implementation on runtime. It was inspired 
 by the SLF4J logging framework.
 
+### Usage
 Dirty one liner 
 ```java
 ConfigFactory.getConfig().getString("db.host");
 ```
 
-A more sane use case 
+A common use case 
 ```java
     private static final Config CONFIG = ConfigFactory.getConfig();
 
