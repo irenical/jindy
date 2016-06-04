@@ -17,8 +17,6 @@ public class ConfigFactory {
   private static Map<String, Config> configs;
 
   private static IConfigFactory defaultConfigFactory;
-  
-  private volatile static ConfigContext context;
 
   private synchronized static void init() {
     if (configs == null) {
@@ -27,13 +25,13 @@ public class ConfigFactory {
       LOG = LoggerFactory.getLogger(ConfigFactory.class);
     }
   }
-  
-  private static void log(boolean debug, String message, Exception error){
-    //during initialization, logging might not exist yet
-    if(LOG!=null){
-      if(error!=null){
-        LOG.error(message,error);
-      } else if(debug){
+
+  private static void log(boolean debug, String message, Exception error) {
+    // during initialization, logging might not exist yet
+    if (LOG != null) {
+      if (error != null) {
+        LOG.error(message, error);
+      } else if (debug) {
         LOG.debug(message);
       } else {
         LOG.info(message);
@@ -82,7 +80,7 @@ public class ConfigFactory {
 
     Config got = configs.get(name);
     if (got == null) {
-      log(true,"No Config instance named " + name + "... requesting a new one",null);
+      log(true, "No Config instance named " + name + "... requesting a new one", null);
       // recheck in synchronized block to avoid double instantiation
       // will block concurrent calls to this Config until
       // the initialization is complete
@@ -91,8 +89,9 @@ public class ConfigFactory {
         if (got == null) {
           got = factory == null ? load(name) : factory.createConfig(name);
           if (got == null) {
-            log(false,"Factory " + factory + " returned a null Config",null);
-            throw new InvalidConfigException("Invalid Config returned by " + factory + " factory: null");
+            log(false, "Factory " + factory + " returned a null Config", null);
+            throw new InvalidConfigException(
+                "Invalid Config returned by " + factory + " factory: null");
           }
           configs.put(name, got);
         }
@@ -102,7 +101,7 @@ public class ConfigFactory {
   }
 
   private static Config load(String name) {
-    log(false,"Looking for a IConfigFactory implementation",null);
+    log(false, "Looking for a IConfigFactory implementation", null);
     ServiceLoader<IConfigFactory> loader = ServiceLoader.load(IConfigFactory.class);
     Iterator<IConfigFactory> implIterator = loader.iterator();
     IConfigFactory got = null;
@@ -112,7 +111,8 @@ public class ConfigFactory {
 
     // error on multiple bindings
     if (implIterator.hasNext()) {
-      StringBuilder sb = new StringBuilder("Multiple bindings found on classpath for " + IConfigFactory.class.getName() + "[");
+      StringBuilder sb = new StringBuilder(
+          "Multiple bindings found on classpath for " + IConfigFactory.class.getName() + "[");
       boolean first = true;
       for (IConfigFactory current : loader) {
         if (!first) {
@@ -122,13 +122,13 @@ public class ConfigFactory {
         first = false;
       }
       sb.append("]");
-      log(false,sb.toString(),null);
+      log(false, sb.toString(), null);
       throw new ConfigMultipleBindingsException(sb.toString());
     }
 
     // ok on single binding
     if (got != null) {
-      log(false,"Found a IConfigFactory implementation: " + got.getClass().getName(), null);
+      log(false, "Found a IConfigFactory implementation: " + got.getClass().getName(), null);
       return got.createConfig(name);
     }
 
@@ -139,32 +139,28 @@ public class ConfigFactory {
     }
 
     // error on no binding
-    log(false,"No bindings found. Make sure you have an implementation class declared in META-INF/services/" + IConfigFactory.class.getName(),null);
-    throw new ConfigBindingNotFoundException("No bindings found. Make sure you have an implementation class declared in META-INF/services/" + IConfigFactory.class.getName());
-  }
-  
-  public static void setContext(ConfigContext context) {
-    ConfigFactory.context = context;
-  }
-  
-  public static ConfigContext getContext() {
-    return context;
+    log(false,
+        "No bindings found. Make sure you have an implementation class declared in META-INF/services/"
+            + IConfigFactory.class.getName(),
+        null);
+    throw new ConfigBindingNotFoundException(
+        "No bindings found. Make sure you have an implementation class declared in META-INF/services/"
+            + IConfigFactory.class.getName());
   }
 
   public synchronized static void setDefaultConfigFactory(IConfigFactory factory) {
     defaultConfigFactory = factory;
   }
 
-    /**
-     * Discards all Config instances
-     */
+  /**
+   * Discards all Config instances
+   */
   public synchronized static void clear() {
     if (configs != null) {
       configs.clear();
     }
 
     defaultConfigFactory = null;
-    context = null;
   }
 
 }

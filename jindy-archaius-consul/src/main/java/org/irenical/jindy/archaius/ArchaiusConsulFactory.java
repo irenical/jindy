@@ -1,21 +1,22 @@
 package org.irenical.jindy.archaius;
 
+import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.configuration.AbstractConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.boundary.config.ConsulWatchedConfigurationSource;
 import com.ecwid.consul.v1.ConsulClient;
 import com.netflix.config.ConfigurationManager;
 import com.netflix.config.DeploymentContext;
-import com.netflix.config.DynamicConfiguration;
 import com.netflix.config.DynamicWatchedConfiguration;
 
-import org.apache.commons.configuration.AbstractConfiguration;
-import org.irenical.jindy.ConfigFactory;
-import org.irenical.jindy.commons.CommonsWrapper;
-
-import java.util.Optional;
-import java.util.ServiceLoader;
-import java.util.concurrent.TimeUnit;
-
 public class ArchaiusConsulFactory extends ArchaiusBaseFactory {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ArchaiusConsulFactory.class);
+
+  public static final String DYNAMIC_CONFIG = "dynamicConfig";
 
   public static final String CONSUL_HOST = "consul.host";
   public static final String CONSUL_PORT = "consul.port";
@@ -25,49 +26,41 @@ public class ArchaiusConsulFactory extends ArchaiusBaseFactory {
   @Override
   protected AbstractConfiguration getConfiguration() {
 
-    ConsulConfigStrategy strategy = findStrategy();
-    
     AbstractConfiguration config = ConfigurationManager.getConfigInstance();
-    String rootConfigPath = null;
-    if (strategy != null) {
-      CommonsWrapper commonsConfig = new CommonsWrapper(config);
-      if(strategy.bypassConsul(commonsConfig)){
-        return new DynamicConfiguration();
-      }
-      rootConfigPath = strategy.getBasePath(commonsConfig);
+    boolean dynamic = config.getBoolean(DYNAMIC_CONFIG, true);
+    if (dynamic) {
+      return config;
     } else {
-      String appName = Optional.ofNullable(ConfigurationManager.getDeploymentContext().getApplicationId()).orElse(ConfigFactory.getContext() == null ? null : ConfigFactory.getContext().getApplicationId());
-
-      if (appName == null) {
-        throw new RuntimeException(DeploymentContext.ContextKey.appId.getKey() + " was not set and no app name set");
+      DeploymentContext context = ConfigurationManager.getDeploymentContext();
+      if (context.getApplicationId() == null) {
+        LOG.info(
+            "No applicationId set on archaius deployment context. Will try to use the 'application' property as fallback.");
+        context.setApplicationId(config.getString("application"));
       }
-      rootConfigPath = appName;
+      String appId = context.getApplicationId();
+      if (appId == null) {
+        throw new RuntimeException(
+            "Archaius deployment context's applicationId not set nor property 'application' found");
+      }
+
+      String consulHost = config.getString(CONSUL_HOST, CONSUL_DEFAULT_HOST);
+      int consulPort = config.getInt(CONSUL_PORT, 8500);
+      String consulAclToken = config.getString(CONSUL_TOKEN);
+
+      ConsulWatchedConfigurationSource configSource = new ConsulWatchedConfigurationSource(appId,
+          new ConsulClient(consulHost, consulPort), 30, TimeUnit.SECONDS, consulAclToken);
+
+      // do the first update synchronously
+      try {
+        configSource.runOnce();
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
+
+      configSource.startAsync();
+
+      return new DynamicWatchedConfiguration(configSource);
     }
-    
-    String consulHost = config.getString(CONSUL_HOST, CONSUL_DEFAULT_HOST);
-    int consulPort = config.getInt(CONSUL_PORT, 8500);
-    String consulAclToken = config.getString(CONSUL_TOKEN);
-
-    ConsulWatchedConfigurationSource configSource = new ConsulWatchedConfigurationSource(rootConfigPath, new ConsulClient(consulHost, consulPort), 30, TimeUnit.SECONDS, consulAclToken);
-
-    // do the first update synchronously
-    try {
-      configSource.runOnce();
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-    }
-
-    configSource.startAsync();
-
-    return new DynamicWatchedConfiguration(configSource);
-  }
-
-  private ConsulConfigStrategy findStrategy() {
-    ServiceLoader<ConsulConfigStrategy> sl = ServiceLoader.load(ConsulConfigStrategy.class);
-    for (ConsulConfigStrategy consulConfigStrategy : sl) {
-      return consulConfigStrategy;
-    }
-    return null;
   }
 
 }

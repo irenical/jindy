@@ -20,11 +20,6 @@
       <version>1.5.0</version>
     </dependency>
     <dependency>
-      <groupId>org.irenical.jindy</groupId>
-      <artifactId>jindy-commons-base</artifactId>
-      <version>1.5.0</version>
-    </dependency>
-    <dependency>
       <groupId>org.irenical.consul</groupId>
       <artifactId>archaius-consul</artifactId>
       <version>1.0.0</version>

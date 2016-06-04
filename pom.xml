@@ -26,7 +26,6 @@
   <modules>
     <module>jindy-api</module>
     <module>jindy-test</module>
-    <module>jindy-apacheconfig-base</module>
     <module>jindy-apacheconfig-impl</module>
     <module>jindy-archaius-base</module>
     <module>jindy-archaius-consul</module>
