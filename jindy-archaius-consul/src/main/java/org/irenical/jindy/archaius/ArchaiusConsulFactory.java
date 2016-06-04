@@ -10,6 +10,7 @@ import com.boundary.config.ConsulWatchedConfigurationSource;
 import com.ecwid.consul.v1.ConsulClient;
 import com.netflix.config.ConfigurationManager;
 import com.netflix.config.DeploymentContext;
+import com.netflix.config.DynamicConfiguration;
 import com.netflix.config.DynamicWatchedConfiguration;
 
 public class ArchaiusConsulFactory extends ArchaiusBaseFactory {
@@ -28,16 +29,18 @@ public class ArchaiusConsulFactory extends ArchaiusBaseFactory {
 
     AbstractConfiguration config = ConfigurationManager.getConfigInstance();
     boolean dynamic = config.getBoolean(DYNAMIC_CONFIG, true);
-    if (dynamic) {
-      return config;
+    if (!dynamic) {
+      return new DynamicConfiguration();
     } else {
+      String appId = null;
       DeploymentContext context = ConfigurationManager.getDeploymentContext();
-      if (context.getApplicationId() == null) {
+      appId = context.getApplicationId();
+      if (appId == null) {
         LOG.info(
             "No applicationId set on archaius deployment context. Will try to use the 'application' property as fallback.");
-        context.setApplicationId(config.getString("application"));
+        appId = config.getString("application");
       }
-      String appId = context.getApplicationId();
+      
       if (appId == null) {
         throw new RuntimeException(
             "Archaius deployment context's applicationId not set nor property 'application' found");

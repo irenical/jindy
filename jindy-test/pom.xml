@@ -12,8 +12,8 @@
   <artifactId>jindy-test</artifactId>
   <version>1.5.0</version>
 
-  <name>Jindy API</name>
-  <description>Jindy - Configuration API</description>
+  <name>Jindy Test</name>
+  <description>JUnit tests for jindy implementations</description>
 
   <packaging>jar</packaging>
 
@@ -35,6 +35,12 @@
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-api</artifactId>
       <version>1.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
