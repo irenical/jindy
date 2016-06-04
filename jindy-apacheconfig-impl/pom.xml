@@ -10,7 +10,11 @@
 
   <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy-apacheconfig-impl</artifactId>
-  <version>1.5.0</version>
+  <version>2.0.0</version>
+
+  <properties>
+    <jindy.version>${project.version}</jindy.version>
+  </properties>
 
   <name>Jindy Apache Commons Configuration Implementation</name>
   <description>A Jindy reference implementation, using Apache commons configurationn</description>
@@ -34,7 +38,7 @@
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-api</artifactId>
-      <version>1.5.0</version>
+      <version>${jindy.version}</version>
     </dependency>
     <dependency>
       <groupId>commons-configuration</groupId>
@@ -60,19 +64,7 @@
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-test</artifactId>
-      <version>1.5.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.1.7</version>
+      <version>${jindy.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
