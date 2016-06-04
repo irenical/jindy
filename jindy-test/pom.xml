@@ -2,13 +2,20 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.irenical.maven</groupId>
+    <artifactId>parent-root</artifactId>
+    <version>1.8.2</version>
+  </parent>
+
   <groupId>org.irenical.jindy</groupId>
-  <artifactId>jindy</artifactId>
+  <artifactId>jindy-test</artifactId>
   <version>1.5.0</version>
 
-  <name>Jindy</name>
+  <name>Jindy API</name>
+  <description>Jindy - Configuration API</description>
 
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
 
   <scm>
     <connection>scm:git:git@github.com:irenical/jindy.git</connection>
@@ -23,13 +30,12 @@
     </developer>
   </developers>
 
-  <modules>
-    <module>jindy-api</module>
-    <module>jindy-test</module>
-    <module>jindy-apacheconfig-base</module>
-    <module>jindy-apacheconfig-impl</module>
-    <module>jindy-archaius-base</module>
-    <module>jindy-archaius-consul</module>
-  </modules>
+  <dependencies>
+    <dependency>
+      <groupId>org.irenical.jindy</groupId>
+      <artifactId>jindy-api</artifactId>
+      <version>1.5.0</version>
+    </dependency>
+  </dependencies>
 
 </project>

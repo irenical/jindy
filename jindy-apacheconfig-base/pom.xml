@@ -9,11 +9,11 @@
   </parent>
 
   <groupId>org.irenical.jindy</groupId>
-  <artifactId>jindy-commons-base</artifactId>
+  <artifactId>jindy-apacheconfig-base</artifactId>
   <version>1.5.0</version>
 
-  <name>Jindy Commons Configuration</name>
-  <description>A base commons configuration jindy implementation</description>
+  <name>Jindy Apache Commons Configuration</name>
+  <description>A base implementation for an apache commons configuration binding</description>
 
   <packaging>jar</packaging>
 
