@@ -12,7 +12,7 @@
 
   <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy-archaius-zookeeper</artifactId>
-  <version>2.1.1</version>
+  <version>2.1.2-SNAPSHOT</version>
 
   <properties>
     <jindy.version>2.1.0</jindy.version>
