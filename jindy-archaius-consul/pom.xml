@@ -12,17 +12,17 @@
 
   <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy-archaius-consul</artifactId>
-  <version>2.1.1-SNAPSHOT</version>
+  <version>2.1.1</version>
   
   <properties>
-    <jindy.version>${project.version}</jindy.version>
+    <jindy.version>2.1.0</jindy.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-archaius-base</artifactId>
-      <version>${jindy.version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.irenical.consul</groupId>

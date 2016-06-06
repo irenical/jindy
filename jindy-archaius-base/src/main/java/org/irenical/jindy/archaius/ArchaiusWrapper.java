@@ -29,27 +29,30 @@ public class ArchaiusWrapper implements Config, ConfigContext {
     this.parent = parent;
     this.configuration = parent.configuration;
     this.prefix = prefix == null ? "" : prefix;
-    this.callbacksByMatch=null;
+    this.callbacksByMatch = null;
   }
 
   public ArchaiusWrapper(Configuration configuration) {
-    this.parent=null;
+    this.parent = null;
     this.configuration = configuration;
     this.prefix = "";
-    callbacksByMatch=new ConcurrentHashMap<>();
+    callbacksByMatch = new ConcurrentHashMap<>();
   }
-  
-  private Map<String, Map<Match, List<Object>>> getAllCallbacks(){
+
+  private Map<String, Map<Match, List<Object>>> getAllCallbacks() {
     return parent != null ? parent.getAllCallbacks() : callbacksByMatch;
   }
 
-  private List<Object> getCallbacks(String key, Match match) {
+  private List<Object> getCallbacks(String key, Match match, boolean create) {
     Map<String, Map<Match, List<Object>>> callbacksByMatch = getAllCallbacks();
     if (match == null) {
       match = Match.EXACT;
     }
     Map<Match, List<Object>> allMatches = callbacksByMatch.get(key);
     if (allMatches == null) {
+      if (!create) {
+        return null;
+      }
       allMatches = new ConcurrentHashMap<>();
       if (null != callbacksByMatch.putIfAbsent(key, allMatches)) {
         allMatches = callbacksByMatch.get(key);
@@ -57,6 +60,9 @@ public class ArchaiusWrapper implements Config, ConfigContext {
     }
     List<Object> forKey = allMatches.get(match);
     if (forKey == null) {
+      if (!create) {
+        return null;
+      }
       forKey = new CopyOnWriteArrayList<>();
       if (null != allMatches.putIfAbsent(match, forKey)) {
         forKey = allMatches.get(match);
@@ -71,10 +77,13 @@ public class ArchaiusWrapper implements Config, ConfigContext {
       throw new IllegalArgumentException("Callback cannot be null");
     }
     PropertyChangedCallback prefixedCallback = null;
-    if(parent!=null){
-      prefixedCallback = (k)->{callback.propertyChanged(k.substring(prefix.length()));};
+    if (parent != null) {
+      prefixedCallback = (k) -> {
+        callback.propertyChanged(k.substring(prefix.length()));
+      };
     }
-    getCallbacks(prefix + key, keyMatchingRule).add(prefixedCallback == null ? callback : prefixedCallback);
+    getCallbacks(prefix + key, keyMatchingRule, true)
+        .add(prefixedCallback == null ? callback : prefixedCallback);
   }
 
   @Override
@@ -87,7 +96,7 @@ public class ArchaiusWrapper implements Config, ConfigContext {
     if (callback == null) {
       throw new IllegalArgumentException("Callback cannot be null");
     }
-    getCallbacks(prefix + key, keyMatchingRule).add(callback);
+    getCallbacks(prefix + key, keyMatchingRule, true).add(callback);
   }
 
   @Override
@@ -114,16 +123,16 @@ public class ArchaiusWrapper implements Config, ConfigContext {
   private void firePrefixOrSuffix(String key) {
     for (String k : new LinkedList<>(getAllCallbacks().keySet())) {
       if (key.startsWith(k)) {
-        fireMatch(key, Match.PREFIX);
+        fireMatch(k, Match.PREFIX);
       }
       if (key.endsWith(k)) {
-        fireMatch(key, Match.SUFFIX);
+        fireMatch(k, Match.SUFFIX);
       }
     }
   }
 
   private void fireMatch(String key, Match match) {
-    List<Object> callbacks = getCallbacks(key, match);
+    List<Object> callbacks = getCallbacks(key, match, false);
     if (callbacks != null) {
       for (Object callback : callbacks) {
         if (callback instanceof PropertyChangedCallback) {
@@ -139,7 +148,8 @@ public class ArchaiusWrapper implements Config, ConfigContext {
 
   private void assertKey(String key) throws ConfigNotFoundException {
     if (!configuration.containsKey(key)) {
-      throw new ConfigNotFoundException("Mandatory configuration property '" + key + "' was not found");
+      throw new ConfigNotFoundException(
+          "Mandatory configuration property '" + key + "' was not found");
     }
   }
 
@@ -208,49 +218,52 @@ public class ArchaiusWrapper implements Config, ConfigContext {
 
   @Override
   public Iterable<String> getKeys(String keyPrefix) {
-    return () -> keyPrefix == null ? (prefix == null ? configuration.getKeys() : configuration.getKeys(prefix)) : configuration.getKeys(prefix + keyPrefix);
+    return () -> keyPrefix == null
+        ? (prefix == null ? configuration.getKeys() : configuration.getKeys(prefix))
+        : configuration.getKeys(prefix + keyPrefix);
   }
 
   @Override
   public Config filterPrefix(String prefix) {
-    return new ArchaiusWrapper((prefix == null || prefix.endsWith(".")) ? prefix : (prefix + "."), this);
+    return new ArchaiusWrapper((prefix == null || prefix.endsWith(".")) ? prefix : (prefix + "."),
+        this);
   }
-  
+
   @Override
   public void clearProperty(String key) {
     configuration.clearProperty(key);
   }
-  
+
   @Override
   public void clear() {
     configuration.clear();
   }
-  
+
   @Override
   public String getApplicationId() {
     return ConfigurationManager.getDeploymentContext().getApplicationId();
   }
-  
+
   @Override
   public String getDatacenter() {
     return ConfigurationManager.getDeploymentContext().getDeploymentDatacenter();
   }
-  
+
   @Override
   public String getEnvironment() {
     return ConfigurationManager.getDeploymentContext().getDeploymentEnvironment();
   }
-  
+
   @Override
   public String getRegion() {
     return ConfigurationManager.getDeploymentContext().getDeploymentRegion();
   }
-  
+
   @Override
   public String getServerId() {
     return ConfigurationManager.getDeploymentContext().getDeploymentServerId();
   }
-  
+
   @Override
   public String getStack() {
     return ConfigurationManager.getDeploymentContext().getDeploymentStack();

@@ -3,8 +3,6 @@ package org.irenical.jindy.archaius;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.configuration.AbstractConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.boundary.config.ConsulWatchedConfigurationSource;
 import com.ecwid.consul.v1.ConsulClient;
@@ -14,8 +12,6 @@ import com.netflix.config.DynamicConfiguration;
 import com.netflix.config.DynamicWatchedConfiguration;
 
 public class ArchaiusConsulFactory extends ArchaiusBaseFactory {
-
-  private static final Logger LOG = LoggerFactory.getLogger(ArchaiusConsulFactory.class);
 
   public static final String CONSUL_HOST = "consul.host";
   public static final String CONSUL_PORT = "consul.port";
@@ -33,15 +29,10 @@ public class ArchaiusConsulFactory extends ArchaiusBaseFactory {
       String appId = null;
       DeploymentContext context = ConfigurationManager.getDeploymentContext();
       appId = context.getApplicationId();
-      if (appId == null) {
-        LOG.info(
-            "No applicationId set on archaius deployment context. Will try to use the 'application' property as fallback.");
-        appId = config.getString("application");
-      }
       
       if (appId == null) {
         throw new RuntimeException(
-            "Archaius deployment context's applicationId not set nor property 'application' found");
+            "Archaius deployment context's applicationId not set (archaius.deployment.applicationId)");
       }
 
       String consulHost = config.getString(CONSUL_HOST, CONSUL_DEFAULT_HOST);
