@@ -9,10 +9,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.apache.commons.configuration.Configuration;
 import org.irenical.jindy.Config;
 import org.irenical.jindy.ConfigChangedCallback;
+import org.irenical.jindy.ConfigContext;
 import org.irenical.jindy.ConfigNotFoundException;
 import org.irenical.jindy.PropertyChangedCallback;
 
-public class ArchaiusWrapper implements Config {
+import com.netflix.config.ConfigurationManager;
+
+public class ArchaiusWrapper implements Config, ConfigContext {
 
   private final Map<String, Map<Match, List<Object>>> callbacksByMatch;
 
@@ -221,6 +224,36 @@ public class ArchaiusWrapper implements Config {
   @Override
   public void clear() {
     configuration.clear();
+  }
+  
+  @Override
+  public String getApplicationId() {
+    return ConfigurationManager.getDeploymentContext().getApplicationId();
+  }
+  
+  @Override
+  public String getDatacenter() {
+    return ConfigurationManager.getDeploymentContext().getDeploymentDatacenter();
+  }
+  
+  @Override
+  public String getEnvironment() {
+    return ConfigurationManager.getDeploymentContext().getDeploymentEnvironment();
+  }
+  
+  @Override
+  public String getRegion() {
+    return ConfigurationManager.getDeploymentContext().getDeploymentRegion();
+  }
+  
+  @Override
+  public String getServerId() {
+    return ConfigurationManager.getDeploymentContext().getDeploymentServerId();
+  }
+  
+  @Override
+  public String getStack() {
+    return ConfigurationManager.getDeploymentContext().getDeploymentStack();
   }
 
 }

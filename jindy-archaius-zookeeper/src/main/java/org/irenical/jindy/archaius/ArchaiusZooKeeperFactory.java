@@ -1,16 +1,17 @@
 package org.irenical.jindy.archaius;
 
-import com.netflix.config.ConfigurationManager;
-import com.netflix.config.DeploymentContext;
-import com.netflix.config.DynamicConfiguration;
-import com.netflix.config.DynamicWatchedConfiguration;
-import com.netflix.config.source.ZooKeeperConfigurationSource;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.netflix.config.ConfigurationManager;
+import com.netflix.config.DeploymentContext;
+import com.netflix.config.DynamicConfiguration;
+import com.netflix.config.DynamicWatchedConfiguration;
+import com.netflix.config.source.ZooKeeperConfigurationSource;
 
 public class ArchaiusZooKeeperFactory extends ArchaiusBaseFactory {
 
@@ -19,7 +20,7 @@ public class ArchaiusZooKeeperFactory extends ArchaiusBaseFactory {
   public static final String ZOOKEEPER_HOSTS = "zookeeper.hosts";
 
   @Override
-  protected AbstractConfiguration getConfiguration() {
+  protected AbstractConfiguration getConfiguration() throws Exception {
     AbstractConfiguration config = ConfigurationManager.getConfigInstance();
     boolean dynamic = config.getBoolean(DYNAMIC_CONFIG, true);
     if (!dynamic) {
@@ -51,7 +52,8 @@ public class ArchaiusZooKeeperFactory extends ArchaiusBaseFactory {
       client.start();
       configSource.start();
     } catch (Exception e) {
-      throw new RuntimeException("Error initializing Zookeeper config source", e);
+      configSource.close();
+      throw e;
     }
 
     return new DynamicWatchedConfiguration(configSource);
