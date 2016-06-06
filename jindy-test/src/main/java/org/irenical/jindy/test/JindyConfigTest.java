@@ -1,6 +1,7 @@
 package org.irenical.jindy.test;
 
 import org.irenical.jindy.Config;
+import org.irenical.jindy.ConfigContext;
 import org.irenical.jindy.ConfigFactory;
 import org.irenical.jindy.ConfigNotFoundException;
 import org.junit.After;
@@ -22,7 +23,7 @@ public class JindyConfigTest {
 
   private static final String P3 = "prop3";
 
-  Config config;
+  protected Config config;
 
   @Before
   public void setupConfig() {
@@ -88,6 +89,18 @@ public class JindyConfigTest {
 
     Assert.assertEquals(V1, config.getString(P1));
     Assert.assertEquals("qwerty", config.getString(P_P1));
+  }
+  
+  @Test
+  public void testContextExists() {
+    ConfigContext context = ConfigFactory.getContext();
+    Assert.assertNotNull(context);
+  }
+  
+  @Test
+  public void testContextIsValid() {
+    ConfigContext context = ConfigFactory.getContext();
+    Assert.assertNotNull(context.getApplicationId());
   }
 
 }

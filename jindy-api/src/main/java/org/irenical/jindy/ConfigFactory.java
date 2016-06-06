@@ -17,6 +17,8 @@ public class ConfigFactory {
   private static Map<String, Config> configs;
 
   private static IConfigFactory defaultConfigFactory;
+  
+  private static ConfigContext context;
 
   private synchronized static void init() {
     if (configs == null) {
@@ -150,6 +152,14 @@ public class ConfigFactory {
 
   public synchronized static void setDefaultConfigFactory(IConfigFactory factory) {
     defaultConfigFactory = factory;
+  }
+  
+  public static void setContext(ConfigContext context) {
+    ConfigFactory.context = context;
+  }
+  
+  public static ConfigContext getContext() {
+    return context;
   }
 
   /**
