@@ -29,6 +29,7 @@
     <module>jindy-apacheconfig-impl</module>
     <module>jindy-archaius-base</module>
     <module>jindy-archaius-consul</module>
+    <module>jindy-archaius-zookeeper</module>
   </modules>
 
 </project>

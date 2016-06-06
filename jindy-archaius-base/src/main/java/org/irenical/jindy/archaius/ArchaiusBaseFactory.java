@@ -1,6 +1,5 @@
 package org.irenical.jindy.archaius;
 
-import com.netflix.config.ConcurrentCompositeConfiguration;
 import com.netflix.config.ConfigurationManager;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.irenical.jindy.Config;
@@ -12,8 +11,9 @@ import org.irenical.jindy.IConfigFactory;
  * @author tgsimao
  */
 public abstract class ArchaiusBaseFactory implements IConfigFactory {
+  protected static final String DYNAMIC_CONFIG = "dynamicConfig";
 
-  private ArchaiusWrapper config;
+  private static ArchaiusWrapper CONFIG;
 
   /**
    * Creates a Configuration with a initialized source and a scheduler already set
@@ -23,26 +23,17 @@ public abstract class ArchaiusBaseFactory implements IConfigFactory {
   @Override
   public Config createConfig(String name) {
     synchronized (ArchaiusBaseFactory.class) {
-      if (config == null) {
-        init();
-        config = new ArchaiusWrapper(ConfigurationManager.getConfigInstance());
+      if (CONFIG == null) {
+        AbstractConfiguration configuration = getConfiguration();
+        ConfigurationManager.install(configuration);
+        CONFIG = new ArchaiusWrapper(configuration);
+        configuration.addConfigurationListener(event -> {
+          if(!event.isBeforeUpdate()) {
+            CONFIG.fire(event.getPropertyName());
+          }
+        });
       }
     }
-    return config;
+    return CONFIG;
   }
-
-  private void init() {
-    AbstractConfiguration abstractConfig = getConfiguration();
-    abstractConfig.addConfigurationListener(event -> {
-      if(!event.isBeforeUpdate()) {
-        config.fire(event.getPropertyName());
-      }
-    });
-
-    ConcurrentCompositeConfiguration finalConfig = new ConcurrentCompositeConfiguration();
-    finalConfig.addConfiguration(abstractConfig);
-
-    ConfigurationManager.install(finalConfig);
-  }
-
 }

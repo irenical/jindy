@@ -17,8 +17,6 @@ public class ArchaiusConsulFactory extends ArchaiusBaseFactory {
 
   private static final Logger LOG = LoggerFactory.getLogger(ArchaiusConsulFactory.class);
 
-  public static final String DYNAMIC_CONFIG = "dynamicConfig";
-
   public static final String CONSUL_HOST = "consul.host";
   public static final String CONSUL_PORT = "consul.port";
   public static final String CONSUL_TOKEN = "consul.token";
