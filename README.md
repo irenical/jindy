@@ -70,12 +70,12 @@ support all features, namely dynamic properties.
 <dependency>
     <groupId>org.irenical.jindy</groupId>
     <artifactId>jindy-api</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.irenical.jindy</groupId>
     <artifactId>jindy-apacheconfig-impl</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
