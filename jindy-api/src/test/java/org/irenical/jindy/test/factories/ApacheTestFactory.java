@@ -72,12 +72,22 @@ public class ApacheTestFactory implements IConfigFactory {
     }
 
     @Override
+    public long getMandatoryLong(String key) throws ConfigNotFoundException {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
     public int getInt(String key, int defaultValue) {
       return config.getInt(key, defaultValue);
     }
 
     @Override
     public float getFloat(String key, float defaultValue) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public long getLong(String key, long defaultValue) {
       throw new UnsupportedOperationException();
     }
 

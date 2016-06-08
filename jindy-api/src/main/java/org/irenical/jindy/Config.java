@@ -110,6 +110,28 @@ public interface Config {
   public float getFloat(String key, float defaultValue);
 
   /**
+   * Returns the long value for given property
+   *
+   * @param key
+   *          - the property name
+   * @return the long value
+   * @throws ConfigNotFoundException
+   *           - if the property is not set
+   */
+  public long getMandatoryLong(String key) throws ConfigNotFoundException;
+
+  /**
+   * Returns the long value for given property
+   *
+   * @param key
+   *          - the property name
+   * @param defaultValue
+   *          - the returned value if the property is not set
+   * @return  a long or defaultValue if none is defined
+     */
+  public long getLong(String key, long defaultValue);
+
+  /**
    * Returns the int value for given property
    * 
    * @param key

@@ -87,6 +87,12 @@ public class CommonsWrapper implements Config, ConfigContext {
   }
 
   @Override
+  public long getMandatoryLong(String key) throws ConfigNotFoundException {
+    assertKey(key);
+    return config.getLong(key);
+  }
+
+  @Override
   public int getInt(String key, int defaultValue) {
     return config.getInt(key, defaultValue);
   }
@@ -94,6 +100,11 @@ public class CommonsWrapper implements Config, ConfigContext {
   @Override
   public float getFloat(String key, float defaultValue) {
     return config.getFloat(key, defaultValue);
+  }
+
+  @Override
+  public long getLong(String key, long defaultValue) {
+    return config.getLong(key, defaultValue);
   }
 
   @Override
