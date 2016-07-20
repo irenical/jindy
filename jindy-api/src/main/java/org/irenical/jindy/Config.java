@@ -10,7 +10,7 @@ public interface Config {
   }
 
   /**
-   * Registers a listener on given property. It will be call whenever the
+   * Registers a listener on given property. It will be called whenever the
    * property's value is changed
    * 
    * @param key
@@ -23,7 +23,7 @@ public interface Config {
   public void listen(String key, Match keyMatchingRule, PropertyChangedCallback callback);
 
   /**
-   * Registers a listener on given property. It will be call whenever the
+   * Registers a listener on given property. It will be called whenever the
    * property's value is changed
    * 
    * @param key
@@ -34,7 +34,7 @@ public interface Config {
   public void listen(String key, PropertyChangedCallback callback);
 
   /**
-   * Registers a listener on given property. It will be call whenever the
+   * Registers a listener on given property. It will be called whenever the
    * property's value is changed
    * 
    * @param key
@@ -47,7 +47,7 @@ public interface Config {
   public void listen(String key, Match keyMatchingRule, ConfigChangedCallback callback);
 
   /**
-   * Registers a listener on given property. It will be call whenever the
+   * Registers a listener on given property. It will be called whenever the
    * property's value is changed
    * 
    * @param key
