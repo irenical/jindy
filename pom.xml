@@ -30,6 +30,7 @@
     <module>jindy-archaius-base</module>
     <module>jindy-archaius-consul</module>
     <module>jindy-archaius-zookeeper</module>
+    <module>jindy-archaius-etcd</module>
   </modules>
 
 </project>
