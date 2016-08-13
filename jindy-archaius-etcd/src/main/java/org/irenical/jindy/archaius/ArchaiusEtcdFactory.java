@@ -2,11 +2,13 @@ package org.irenical.jindy.archaius;
 
 import com.netflix.config.ConfigurationManager;
 import com.netflix.config.DeploymentContext;
+import com.netflix.config.DynamicConfiguration;
 import com.netflix.config.DynamicWatchedConfiguration;
 import com.netflix.config.source.EtcdConfigurationSource;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.boon.etcd.ClientBuilder;
 import org.boon.etcd.Etcd;
+import org.boon.etcd.EtcdClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,16 +25,11 @@ public class ArchaiusEtcdFactory extends ArchaiusBaseFactory {
   protected AbstractConfiguration getConfiguration() {
 
     AbstractConfiguration config = ConfigurationManager.getConfigInstance();
-    String[] etcdHosts = config.getStringArray(ETCD_HOSTS);
 
-    Etcd etcdClient;
-    if(etcdHosts != null && etcdHosts.length > 0) {
-      URI[] etcdHostURIs = Arrays.stream(etcdHosts).map(URI::create).toArray(URI[]::new);
-      etcdClient = ClientBuilder.builder().hosts(etcdHostURIs).createClient();
-    } else {
-      etcdClient = ClientBuilder.builder().createClient();
+    boolean dynamic = config.getBoolean(DYNAMIC_CONFIG, true);
+    if (!dynamic) {
+      return new DynamicConfiguration();
     }
-
 
     String appId;
     DeploymentContext context = ConfigurationManager.getDeploymentContext();
@@ -47,6 +44,17 @@ public class ArchaiusEtcdFactory extends ArchaiusBaseFactory {
       throw new RuntimeException(
         "Archaius deployment context's applicationId not set nor property 'application' found");
     }
+
+    String[] etcdHosts = config.getStringArray(ETCD_HOSTS);
+
+    Etcd etcdClient;
+    if(etcdHosts != null && etcdHosts.length > 0) {
+      URI[] etcdHostURIs = Arrays.stream(etcdHosts).map(URI::create).toArray(URI[]::new);
+      etcdClient = ClientBuilder.builder().hosts(etcdHostURIs).createClient();
+    } else {
+      etcdClient = ClientBuilder.builder().hosts(URI.create("127.0.0.1:2379")).createClient();
+    }
+
 
     EtcdConfigurationSource configSource = new EtcdConfigurationSource(etcdClient, appId);
 
