@@ -9,6 +9,7 @@ import org.apache.commons.configuration.AbstractConfiguration;
 import org.boon.etcd.ClientBuilder;
 import org.boon.etcd.Etcd;
 import org.boon.etcd.EtcdClient;
+import org.irenical.jindy.ConfigNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,7 @@ public class ArchaiusEtcdFactory extends ArchaiusBaseFactory {
   public static final String ETCD_HOSTS = "etcd.hosts";
 
   @Override
-  protected AbstractConfiguration getConfiguration() {
+  protected AbstractConfiguration getConfiguration() throws ConfigNotFoundException {
 
     AbstractConfiguration config = ConfigurationManager.getConfigInstance();
 
@@ -52,7 +53,7 @@ public class ArchaiusEtcdFactory extends ArchaiusBaseFactory {
       URI[] etcdHostURIs = Arrays.stream(etcdHosts).map(URI::create).toArray(URI[]::new);
       etcdClient = ClientBuilder.builder().hosts(etcdHostURIs).createClient();
     } else {
-      etcdClient = ClientBuilder.builder().hosts(URI.create("127.0.0.1:2379")).createClient();
+      throw new ConfigNotFoundException("No etcd hosts configured. Could not create etcd client");
     }
 
 
