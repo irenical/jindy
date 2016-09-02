@@ -4,7 +4,7 @@
 ### What and Why
 Jindy is a configuration API for Java.
 
-Whether you use a database, a properties file or framework such as Apache Commons Configuration, Netflix's Archaius 
+Whether you use a database, a properties file or a framework such as Apache Commons Configuration, Netflix's Archaius 
 or one of your own, chances are you are forced to know which while you code your stuff. Much like in logging, 
 configuration is needed in pretty much everything you do, and much like in logging you probably only need a simple 
 stable API.
@@ -13,6 +13,23 @@ Jindy tries to solve this, by offering a simple API and a way to bind your imple
 by the SLF4J logging framework.
 
 ### Usage
+
+To use Jindy you need both the API and an actual implementation in your classpath. Note that some bindings might not 
+support all features, namely dynamic properties.
+
+```xml
+<dependency>
+    <groupId>org.irenical.jindy</groupId>
+    <artifactId>jindy-api</artifactId>
+    <version>2.1.0</version>
+</dependency>
+<dependency>
+    <groupId>org.irenical.jindy</groupId>
+    <artifactId>jindy-apacheconfig-impl</artifactId>
+    <version>2.1.0</version>
+</dependency>
+```
+
 Dirty one liner 
 ```java
 ConfigFactory.getConfig().getString("db.host");
@@ -63,21 +80,8 @@ All of that with dynamic behaviour
     }
 ```
 
-To use Jindy you need both the API and an actual implementation in your classpath. Note that some bindings might not 
-support all features, namely dynamic properties.
-
-```xml
-<dependency>
-    <groupId>org.irenical.jindy</groupId>
-    <artifactId>jindy-api</artifactId>
-    <version>2.1.0</version>
-</dependency>
-<dependency>
-    <groupId>org.irenical.jindy</groupId>
-    <artifactId>jindy-apacheconfig-impl</artifactId>
-    <version>2.1.0</version>
-</dependency>
-```
+### Limitations
+You cannot have multiple implementations/bindings at the same time. In order to avoid this, your libraries should only depend on the jindy-api, leaving the implementation choice to the final application (war, executable jar, application container, etc... ).
 
 [maven]:http://search.maven.org/#search|gav|1|g:"org.irenical.jindy"%20AND%20a:"jindy-api"
 [maven img]:https://maven-badges.herokuapp.com/maven-central/org.irenical.jindy/jindy-api/badge.svg
