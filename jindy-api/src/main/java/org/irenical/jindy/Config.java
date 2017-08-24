@@ -8,6 +8,7 @@ public interface Config {
   public enum Match {
     EXACT, PREFIX, SUFFIX
   }
+  
 
   /**
    * Registers a listener on given property. It will be called whenever the
@@ -19,8 +20,9 @@ public interface Config {
    *          - the key matching rule
    * @param callback
    *          - the callback function
+   * @return the listener ID
    */
-  public void listen(String key, Match keyMatchingRule, PropertyChangedCallback callback);
+  public String listen(String key, Match keyMatchingRule, PropertyChangedCallback callback);
 
   /**
    * Registers a listener on given property. It will be called whenever the
@@ -30,40 +32,18 @@ public interface Config {
    *          - the property name
    * @param callback
    *          - the callback function
+   * @return the listener ID
    */
-  public void listen(String key, PropertyChangedCallback callback);
+  public String listen(String key, PropertyChangedCallback callback);
+
 
   /**
-   * Registers a listener on given property. It will be called whenever the
-   * property's value is changed
+   * Unregisters given listener
    * 
-   * @param key
-   *          - the property name
-   * @param keyMatchingRule
-   *          - the key matching rule
-   * @param callback
-   *          - the callback function
+   * @param listenerId
+   *          - the listener's ID earlier returned by a listen()
    */
-  public void listen(String key, Match keyMatchingRule, ConfigChangedCallback callback);
-
-  /**
-   * Registers a listener on given property. It will be called whenever the
-   * property's value is changed
-   * 
-   * @param key
-   *          - the property name
-   * @param callback
-   *          - the callback function
-   */
-  public void listen(String key, ConfigChangedCallback callback);
-
-  /**
-   * Unregisters listener on all keys
-   * 
-   * @param callback
-   *          - the callback function earlier registered with listen()
-   */
-  public void unListen(ConfigChangedCallback callback);
+  public void unListen(String listenerId);
 
   /**
    * Returns the boolean value for given property

@@ -6,7 +6,6 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.SystemConfiguration;
 import org.irenical.jindy.Config;
-import org.irenical.jindy.ConfigChangedCallback;
 import org.irenical.jindy.ConfigNotFoundException;
 import org.irenical.jindy.IConfigFactory;
 import org.irenical.jindy.PropertyChangedCallback;
@@ -22,17 +21,7 @@ public class ApacheTestFactory implements IConfigFactory {
     }
 
     @Override
-    public void unListen(ConfigChangedCallback callback) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void listen(String key, Match keyMatchingRule, ConfigChangedCallback callback) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void listen(String key, ConfigChangedCallback callback) {
+    public void unListen(String listenerId) {
       throw new UnsupportedOperationException();
     }
 
@@ -107,12 +96,12 @@ public class ApacheTestFactory implements IConfigFactory {
     }
 
     @Override
-    public void listen(String key, Match keyMatchingRule, PropertyChangedCallback callback) {
+    public String listen(String key, Match keyMatchingRule, PropertyChangedCallback callback) {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public void listen(String key, PropertyChangedCallback callback) {
+    public String listen(String key, PropertyChangedCallback callback) {
       throw new UnsupportedOperationException();
     }
 

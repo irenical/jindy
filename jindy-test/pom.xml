@@ -3,30 +3,17 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.irenical.maven</groupId>
-    <artifactId>parent-root</artifactId>
-    <version>1.8.2</version>
-    <relativePath/>
+    <groupId>org.irenical.jindy</groupId>
+    <artifactId>jindy</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy-test</artifactId>
-  <version>2.1.1-SNAPSHOT</version>
-  
-  <properties>
-    <jindy.version>${project.version}</jindy.version>
-  </properties>
 
   <name>Jindy Test</name>
   <description>JUnit tests for jindy implementations</description>
 
   <packaging>jar</packaging>
-
-  <scm>
-    <connection>scm:git:git@github.com:irenical/jindy.git</connection>
-    <developerConnection>scm:git:git@github.com:irenical/jindy.git</developerConnection>
-    <url>git@github.com:irenical/jindy.git</url>
-  </scm>
 
   <developers>
     <developer>
@@ -39,7 +26,7 @@
     <dependency>
       <groupId>org.irenical.jindy</groupId>
       <artifactId>jindy-api</artifactId>
-      <version>${jindy.version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

@@ -1,14 +1,12 @@
 package org.irenical.jindy.archaius;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.configuration.Configuration;
 import org.irenical.jindy.Config;
-import org.irenical.jindy.ConfigChangedCallback;
 import org.irenical.jindy.ConfigContext;
 import org.irenical.jindy.ConfigNotFoundException;
 import org.irenical.jindy.PropertyChangedCallback;
@@ -17,7 +15,7 @@ import com.netflix.config.ConfigurationManager;
 
 public class ArchaiusWrapper implements Config, ConfigContext {
 
-  private final Map<String, Map<Match, List<Object>>> callbacksByMatch;
+  private final Map<String, Map<Match, Map<String, PropertyChangedCallback>>> callbacksByMatch;
 
   private final Configuration configuration;
 
@@ -39,16 +37,16 @@ public class ArchaiusWrapper implements Config, ConfigContext {
     callbacksByMatch = new ConcurrentHashMap<>();
   }
 
-  private Map<String, Map<Match, List<Object>>> getAllCallbacks() {
+  private Map<String, Map<Match, Map<String, PropertyChangedCallback>>> getAllCallbacks() {
     return parent != null ? parent.getAllCallbacks() : callbacksByMatch;
   }
 
-  private List<Object> getCallbacks(String key, Match match, boolean create) {
-    Map<String, Map<Match, List<Object>>> callbacksByMatch = getAllCallbacks();
+  private Map<String, PropertyChangedCallback> getCallbacks(String key, Match match, boolean create) {
+    Map<String, Map<Match, Map<String, PropertyChangedCallback>>> callbacksByMatch = getAllCallbacks();
     if (match == null) {
       match = Match.EXACT;
     }
-    Map<Match, List<Object>> allMatches = callbacksByMatch.get(key);
+    Map<Match, Map<String, PropertyChangedCallback>> allMatches = callbacksByMatch.get(key);
     if (allMatches == null) {
       if (!create) {
         return null;
@@ -58,12 +56,12 @@ public class ArchaiusWrapper implements Config, ConfigContext {
         allMatches = callbacksByMatch.get(key);
       }
     }
-    List<Object> forKey = allMatches.get(match);
+    Map<String, PropertyChangedCallback> forKey = allMatches.get(match);
     if (forKey == null) {
       if (!create) {
         return null;
       }
-      forKey = new CopyOnWriteArrayList<>();
+      forKey = new ConcurrentHashMap<>();
       if (null != allMatches.putIfAbsent(match, forKey)) {
         forKey = allMatches.get(match);
       }
@@ -72,7 +70,7 @@ public class ArchaiusWrapper implements Config, ConfigContext {
   }
 
   @Override
-  public void listen(String key, Match keyMatchingRule, PropertyChangedCallback callback) {
+  public String listen(String key, Match keyMatchingRule, PropertyChangedCallback callback) {
     if (callback == null) {
       throw new IllegalArgumentException("Callback cannot be null");
     }
@@ -82,35 +80,22 @@ public class ArchaiusWrapper implements Config, ConfigContext {
         callback.propertyChanged(k.substring(prefix.length()));
       };
     }
-    getCallbacks(prefix + key, keyMatchingRule, true)
-        .add(prefixedCallback == null ? callback : prefixedCallback);
+    String id = UUID.randomUUID().toString();
+    getCallbacks(prefix + key, keyMatchingRule, true).put(id, prefixedCallback == null ? callback : prefixedCallback);
+    return id;
   }
 
   @Override
-  public void listen(String key, PropertyChangedCallback callback) {
-    listen(key, Match.EXACT, callback);
+  public String listen(String key, PropertyChangedCallback callback) {
+    return listen(key, Match.EXACT, callback);
   }
 
   @Override
-  public void listen(String key, Match keyMatchingRule, ConfigChangedCallback callback) {
-    if (callback == null) {
-      throw new IllegalArgumentException("Callback cannot be null");
-    }
-    getCallbacks(prefix + key, keyMatchingRule, true).add(callback);
-  }
-
-  @Override
-  public void listen(String key, ConfigChangedCallback callback) {
-    listen(key, Match.EXACT, callback);
-  }
-
-  @Override
-  public void unListen(ConfigChangedCallback callback) {
-    for (Map<Match, List<Object>> allMatches : new LinkedList<>(getAllCallbacks().values())) {
+  public void unListen(String listenerId) {
+    for (Map<Match, Map<String,PropertyChangedCallback>> allMatches : new LinkedList<>(getAllCallbacks().values())) {
       for (Match match : new LinkedList<>(allMatches.keySet())) {
-        List<Object> forKey = allMatches.get(match);
-        while (forKey.remove(callback))
-          ;
+        Map<String,PropertyChangedCallback> forKey = allMatches.get(match);
+        forKey.remove(listenerId);
       }
     }
   }
@@ -132,24 +117,17 @@ public class ArchaiusWrapper implements Config, ConfigContext {
   }
 
   private void fireMatch(String key, Match match) {
-    List<Object> callbacks = getCallbacks(key, match, false);
+    Map<String, PropertyChangedCallback> callbacks = getCallbacks(key, match, false);
     if (callbacks != null) {
-      for (Object callback : callbacks) {
-        if (callback instanceof PropertyChangedCallback) {
-          ((PropertyChangedCallback) callback).propertyChanged(key);
-        } else if (callback instanceof ConfigChangedCallback) {
-          ((ConfigChangedCallback) callback).propertyChanged();
-        } else {
-          throw new RuntimeException("Unsupported callback object: " + callback);
-        }
+      for (PropertyChangedCallback callback : callbacks.values()) {
+        callback.propertyChanged(key);
       }
     }
   }
 
   private void assertKey(String key) throws ConfigNotFoundException {
     if (!configuration.containsKey(key)) {
-      throw new ConfigNotFoundException(
-          "Mandatory configuration property '" + key + "' was not found");
+      throw new ConfigNotFoundException("Mandatory configuration property '" + key + "' was not found");
     }
   }
 
@@ -181,6 +159,13 @@ public class ArchaiusWrapper implements Config, ConfigContext {
     assertKey(key);
     return configuration.getInt(key);
   }
+  
+  @Override
+  public long getMandatoryLong(String key) throws ConfigNotFoundException {
+    key = prefix + key;
+    assertKey(key);
+    return configuration.getLong(key);
+  }
 
   @Override
   public float getMandatoryFloat(String key) throws ConfigNotFoundException {
@@ -200,6 +185,11 @@ public class ArchaiusWrapper implements Config, ConfigContext {
   public int getInt(String key, int defaultValue) {
     return configuration.getInt(prefix + key, defaultValue);
   }
+  
+  @Override
+  public long getLong(String key, long defaultValue) {
+    return configuration.getLong(prefix + key, defaultValue);
+  }
 
   @Override
   public float getFloat(String key, float defaultValue) {
@@ -218,15 +208,13 @@ public class ArchaiusWrapper implements Config, ConfigContext {
 
   @Override
   public Iterable<String> getKeys(String keyPrefix) {
-    return () -> keyPrefix == null
-        ? (prefix == null ? configuration.getKeys() : configuration.getKeys(prefix))
+    return () -> keyPrefix == null ? (prefix == null ? configuration.getKeys() : configuration.getKeys(prefix))
         : configuration.getKeys(prefix + keyPrefix);
   }
 
   @Override
   public Config filterPrefix(String prefix) {
-    return new ArchaiusWrapper((prefix == null || prefix.endsWith(".")) ? prefix : (prefix + "."),
-        this);
+    return new ArchaiusWrapper((prefix == null || prefix.endsWith(".")) ? prefix : (prefix + "."), this);
   }
 
   @Override

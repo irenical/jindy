@@ -2,7 +2,6 @@ package org.irenical.jindy.commons;
 
 import org.apache.commons.configuration.Configuration;
 import org.irenical.jindy.Config;
-import org.irenical.jindy.ConfigChangedCallback;
 import org.irenical.jindy.ConfigContext;
 import org.irenical.jindy.ConfigNotFoundException;
 import org.irenical.jindy.PropertyChangedCallback;
@@ -23,28 +22,20 @@ public class CommonsWrapper implements Config, ConfigContext {
   }
 
   @Override
-  public void unListen(ConfigChangedCallback callback) {
+  public void unListen(String listenerId) {
     // commons configuration is immutable, do nothing
   }
 
   @Override
-  public void listen(String key, Match keyMatchingRule, PropertyChangedCallback callback) {
+  public String listen(String key, Match keyMatchingRule, PropertyChangedCallback callback) {
     // commons configuration is immutable, do nothing
+    return null;
   }
 
   @Override
-  public void listen(String key, PropertyChangedCallback callback) {
+  public String listen(String key, PropertyChangedCallback callback) {
     // commons configuration is immutable, do nothing
-  }
-
-  @Override
-  public void listen(String key, Match keyMatchingRule, ConfigChangedCallback callback) {
-    // commons configuration is immutable, do nothing
-  }
-
-  @Override
-  public void listen(String key, ConfigChangedCallback callback) {
-    // commons configuration is immutable, do nothing
+    return null;
   }
 
   @Override
