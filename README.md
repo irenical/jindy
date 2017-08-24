@@ -1,5 +1,6 @@
 [![][maven img]][maven]
 [![][travis img]][travis]
+[![][codecov img]][codecov]
 
 ### What and Why
 Jindy is a configuration API for Java.
@@ -88,3 +89,6 @@ You cannot have multiple implementations/bindings at the same time. In order to 
 
 [travis]:https://travis-ci.org/irenical/jindy
 [travis img]:https://travis-ci.org/irenical/jindy.svg?branch=master
+
+[codecov]:https://codecov.io/gh/irenical/jindy
+[codecov img]:https://codecov.io/gh/irenical/jindy/branch/master/graph/badge.svg
