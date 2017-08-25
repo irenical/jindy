@@ -9,7 +9,7 @@
 
   <groupId>org.irenical.jindy</groupId>
   <artifactId>jindy</artifactId>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.0.2</version>
 
   <name>Jindy</name>
 
@@ -19,7 +19,7 @@
     <connection>scm:git:git@github.com:irenical/jindy.git</connection>
     <developerConnection>scm:git:git@github.com:irenical/jindy.git</developerConnection>
     <url>git@github.com:irenical/jindy.git</url>
-    <tag>HEAD</tag>
+    <tag>jindy-3.0.2</tag>
   </scm>
 
   <developers>
