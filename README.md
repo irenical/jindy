@@ -22,13 +22,19 @@ support all features, namely dynamic properties.
 <dependency>
     <groupId>org.irenical.jindy</groupId>
     <artifactId>jindy-api</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.2</version>
 </dependency>
 <dependency>
     <groupId>org.irenical.jindy</groupId>
     <artifactId>jindy-apacheconfig-impl</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.2</version>
 </dependency>
+```
+
+Throw a config.properties file to your src/main/resources
+```properties
+db.host=localhost
+db.port=5432
 ```
 
 Dirty one liner 
@@ -61,7 +67,7 @@ Strongly typed properties with default values and typical is-property-defined ch
     }
 ```
 
-All of that with dynamic behaviour
+Reacting to configuration changes
 ```java
    private static final Config CONFIG = ConfigFactory.getConfig();
     
@@ -80,6 +86,11 @@ All of that with dynamic behaviour
         }
     }
 ```
+For dynamic behaviour to kick in, you must use a binding that actually implements it (ex: consul, zookeeper, etcd, ...), as of today jindy-apacheconfig-impl does not.
+
+### Configuration Sources
+Depending on the binding you chose, the supported configuration sources might vary. The Consul-backed implementation provided by the Jindy project will behave as Netflix's Archaius, trying to read configuration properties from Consul key-value API, the file located at the property archaius.configurationSource.additionalUrls (passed to the JVM with -D), the config.properties file and the system's properties in that order. In this implementation, changes in Consul will instantly trigger any relevant listener registered with Jindy.
+
 
 ### Limitations
 You cannot have multiple implementations/bindings at the same time. In order to avoid this, your libraries should only depend on the jindy-api, leaving the implementation choice to the final application (war, executable jar, application container, etc... ).
