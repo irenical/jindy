@@ -10,8 +10,10 @@ or one of your own, chances are you are forced to know which while you code your
 configuration is needed in pretty much everything you do, and much like in logging you probably only need a simple 
 stable API.
 
+Since changes in jindy-api have high impact in the downstream, the API was designed to be a sensible superset of multiple java configuration implementations both in features and naming. Breaking changes are released with an incremented major version. API increments might occurr in a minor version and there is currently no check for bytecode retro-compatibility, so some care is advised. Patch versions don't change the jindy-api's interfaces whatsoever.
+
 Jindy tries to solve this, by offering a simple API and a way to bind your implementation on runtime. It was inspired 
-by the SLF4J logging framework.
+by the SLF4J logging framework (https://www.slf4j.org).
 
 ### Usage
 
