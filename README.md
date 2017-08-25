@@ -22,12 +22,12 @@ support all features, namely dynamic properties.
 <dependency>
     <groupId>org.irenical.jindy</groupId>
     <artifactId>jindy-api</artifactId>
-    <version>2.1.0</version>
+    <version>3.0.0</version>
 </dependency>
 <dependency>
     <groupId>org.irenical.jindy</groupId>
     <artifactId>jindy-apacheconfig-impl</artifactId>
-    <version>2.1.0</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
@@ -70,7 +70,7 @@ All of that with dynamic behaviour
         CONFIG.listen("db.host", this::setupMyDatabase);
     }
     
-    public void setupMyDatabase(){
+    public void setupMyDatabase(String changedKey){
         try{
             String dbHost = CONFIG.getMandatoryString("db.host");
             int dbPort = CONFIG.getInt("db.port",5432);
