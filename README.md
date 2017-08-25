@@ -5,6 +5,9 @@
 ### What and Why
 Jindy is a configuration API for Java.
 
+![alt text][knob]  
+
+
 Whether you use a database, a properties file or a framework such as Apache Commons Configuration, Netflix's Archaius 
 or one of your own, chances are you are forced to know which while you code your stuff. Much like in logging, 
 configuration is needed in pretty much everything you do, and much like in logging you probably only need a simple 
@@ -96,6 +99,8 @@ Depending on the binding you chose, the supported configuration sources might va
 
 ### Limitations
 You cannot have multiple implementations/bindings at the same time. In order to avoid this, your libraries should only depend on the jindy-api, leaving the implementation choice to the final application (war, executable jar, application container, etc... ).
+
+[knob]:https://www.irenical.org/jindy/knob.png "Rotating a knob didn't reboot the whole radio"
 
 [maven]:http://search.maven.org/#search|gav|1|g:"org.irenical.jindy"%20AND%20a:"jindy-api"
 [maven img]:https://maven-badges.herokuapp.com/maven-central/org.irenical.jindy/jindy-api/badge.svg
